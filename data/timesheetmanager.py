@@ -1,10 +1,10 @@
 import datetime
 
 class TimesheetManager:
-    def __init__(self, log_worksheet, employee_manager, employer_mananger):
+    def __init__(self, log_worksheet, employee_manager, employer_manager):
         self.ws = log_worksheet
         self.employee_manager = employee_manager
-        self.employer_manager = employer_mananger
+        self.employer_manager = employer_manager
 
 
     """
