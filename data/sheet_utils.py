@@ -14,8 +14,12 @@ def get_log_and_data_worksheets():
         log_ws.append_row(headers)    
         print("Created new 'LOG' worksheet with headers.")
     
-    # Get DATA worksheet
-    data_ws = sh.worksheet("DATA")
+    data_ws = sh.worksheet("DATA")      # Get DATA worksheet
+
+    data_ws.freeze(rows=2)              # Freeze the top 2 rows of the DATA sheet
+    print("Frozen top 2 rows in DATA.")
+    log_ws.freeze(rows=1)               # Freeze the top 1 row of the LOG sheet
+    print("Frozen top 1 row in LOG.")
     
     return data_ws, log_ws
 
