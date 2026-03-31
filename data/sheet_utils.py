@@ -1,9 +1,46 @@
 import gspread
 
+
+def get_log_and_data_worksheets():
+    gc = gspread.service_account(filename='creds.json')
+    sh = gc.open("MosherMade_Sheet")
+    
+    # Get or create LOG worksheet
+    try:
+        log_ws = sh.worksheet("LOG")
+    except gspread.exceptions.WorksheetNotFound:
+        log_ws = sh.add_worksheet(title="LOG", rows="100", cols="20")
+        headers = ["Date", "Employee", "Employer", "Type", "Hours", "Amount", "Notes"]
+        log_ws.append_row(headers)    
+        print("Created new 'LOG' worksheet with headers.")
+    
+    # Get DATA worksheet
+    data_ws = sh.worksheet("DATA")
+    
+    return data_ws, log_ws
+
+
 def get_data_worksheet():
     gc = gspread.service_account(filename='creds.json')
     sh = gc.open("MosherMade_Sheet")
     return sh.worksheet("DATA")
+
+
+def get_log_worksheet():
+    gc = gspread.service_account(filename='creds.json')
+    sh = gc.open("MosherMade_Sheet")
+
+    try:
+        return sh.worksheet("LOG")
+    except gspread.exceptions.WorksheetNotFound:
+        # If it's missing, create it and add the headers
+        log_ws = sh.add_worksheet(title="LOG", rows="100", cols="20")
+
+        # Define your standard headers for the ledger
+        headers = ["Date", "Employee", "Employer", "Type", "Hours", "Amount", "Notes"]
+        log_ws.append_row(headers)    
+        print("Created new 'LOG' worksheet with headers.")
+        return log_ws
 
 
 def print_lists():
@@ -20,52 +57,8 @@ def print_lists():
         print(f"An error occurred: {e}")
 
 
-
-# Employee Management Functions
-def check_employee_exists(name):
-    ws = get_data_worksheet()
-    employees = ws.col_values(1)
-    return name in employees
-
-
-def get_employee(name):
-    ws = get_data_worksheet()
-    employees = ws.col_values(1)
-    
-    try:
-        row_index = employees.index(name) + 1
-        wage = ws.cell(row_index, 2).value
-        return {"name": name, "wage": wage}
-    except ValueError:
-        print(f"Employee {name} not found.")
-        return None
-
-
-
-
-# Employer Management Functions
-def check_employer_exists(name):
-    ws = get_data_worksheet()
-    employers = ws.col_values(5)
-    return name in employers
-
-
-def get_employer(name):
-    ws = get_data_worksheet()
-    employers = ws.col_values(5)
-    
-    try:
-        row_index = employers.index(name) + 1
-        location = ws.cell(row_index, 6).value
-        return {"name": name, "location": location}
-    except ValueError:
-        print(f"Employer {name} not found.")
-        return None
-
-
-
-# Test function to print named ranges in the sheet
-def test_named_ranges():
+# Utility to print all named ranges in the sheet for debugging
+def get_all_named_ranges():
     gc = gspread.service_account(filename='creds.json')
     sh = gc.open("MosherMade_Sheet")
     named_ranges = sh.fetch_sheet_metadata()['namedRanges']
@@ -78,12 +71,6 @@ def test_named_ranges():
 
 # Examples of how to call these:
 if __name__ == "__main__":
-    manage_employee('ADD', 'Dr.Test', "$45.00")
-    manage_employer('ADD', 'New Job')
-    print_lists()
-    manage_employee('DELETE', 'Dr.Test')
-    manage_employer('DELETE', 'New Job')
-
     print_lists()
 
    

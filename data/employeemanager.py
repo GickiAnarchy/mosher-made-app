@@ -1,5 +1,3 @@
-
-
 class EmployeeManager:
     def __init__(self, worksheet):
         self.ws = worksheet
@@ -41,11 +39,6 @@ class EmployeeManager:
             print(f"Removed {name} and their wage data.")
 
 
-    def list_all(self):
-        # Assumes a named range "Employees" exists or fetches Col A
-        return [name[0] for name in self.ws.get("Employees") if name]
-
-
     def get(self, name):
         row = self._get_row_index(name)
         if row:
@@ -55,8 +48,8 @@ class EmployeeManager:
 
 
     def get_names(self):
-        names = self.ws.get("Employees")
-        return names
+        employee_list = self.ws.get("Employees")
+        return [name[0] for name in employee_list if name]
 
 
     def _exists(self, name):
