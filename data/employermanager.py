@@ -72,7 +72,7 @@ class EmployerManager:
         """Returns a list of all employer names from Column F."""
         names = self.ws.col_values(6)
         # Skip the header row
-        return [name for name in names[1:] if name]
+        return [name for name in names[2:] if name]
 
 
     def _exists(self, name):
