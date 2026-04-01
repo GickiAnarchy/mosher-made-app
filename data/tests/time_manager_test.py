@@ -14,8 +14,6 @@ from sheet_utils import get_log_and_data_worksheets, print_lists
 
 
 
-print_lists()
-
 def get_timesheet_manager():
     # 1. Setup Worksheets
     data_ws, log_ws = get_log_and_data_worksheets()
@@ -55,7 +53,6 @@ def test_time_manager():
     status_chad = ts_manager.get_summary("Chad")
     for k,v in status_chad.items():
         print(f"Chad's {k}: {v}")
-
 
 
 def clear_logs():

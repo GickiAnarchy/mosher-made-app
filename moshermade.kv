@@ -1,0 +1,23 @@
+
+
+
+<LogWorkScreen>:
+	name:"logwork"
+	
+	MDBoxLayout:
+		orientation:"vertical'"
+		
+		MDTextField:
+		    id: employee_field
+		    hint_text: "Select Employee"
+		    mode: "outlined"
+		    readonly: True
+		    on_focus: if self.focus: root.open_employee_dropdown(self)
+		
+		MDTextField:
+		    id: employer_field
+		    hint_text: "Select Employer/Job"
+		    mode: "outlined"
+		    readonly: True
+		    on_focus: if self.focus: root.open_employer_dropdown(self)
+		
