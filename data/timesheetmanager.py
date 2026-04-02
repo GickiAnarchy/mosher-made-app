@@ -1,10 +1,11 @@
 import datetime
+from data import EmployeeManager, EmployerManager 
 
 class TimesheetManager:
-    def __init__(self, log_worksheet, employee_manager, employer_manager):
+    def __init__(self, log_worksheet, data_ws):
         self.ws = log_worksheet
-        self.employee_manager = employee_manager
-        self.employer_manager = employer_manager
+        self.employee_manager = EmployeeManager(data_ws)
+        self.employer_manager = EmployerManager(data_ws)
 
 
     """
@@ -139,3 +140,11 @@ class TimesheetManager:
                 print("Logs cleared via cell wipe.")
         else:
             print("Sheet is already empty.")
+
+
+    def get_employees(self):
+        return self.employee_manager.get_names()
+
+
+    def get_employers(self):
+        return self.employer_manager.get_names()

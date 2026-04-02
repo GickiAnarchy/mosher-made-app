@@ -10,19 +10,40 @@
 	MDBoxLayout:
 		orientation:"vertical"
 		
-		MDTextField:
-		    id: employee_field
-			text: "EMPLOYEE"
-		    hint_text: "Select Employee"
-		    mode: "outlined"
-		    readonly: True
-		    on_focus: if self.focus: root.open_employee_menu(self)
-		
-		MDTextField:
-		    id: employer_field
-			text: "EMPLOYER"
-		    hint_text: "Select Employer/Job"
-		    mode: "outlined"
-		    readonly: True
-		    on_focus: if self.focus: root.open_employer_menu(self)
-		
+		MDBoxLayout:
+			orientation:"horizontal"
+			padding: 10
+			spacing: 10
+
+			MDLabel:
+				id:employee_label
+				text:"Employee:"
+				size_hint: 0.4, None
+				height: dp(45)
+
+			MDButton:
+				id: employee_button
+				pos_hint: {"center_x":0.5}
+				size_hint_x: 0.6
+				on_release: root.open_employee_menu(self)
+				MDButtonText:
+					text: "Employees"
+
+		MDBoxLayout:
+			orientation:"horizontal"
+			padding: 10
+			spacing: 10
+
+			MDLabel:
+				id:employer_label
+				text:"Employer:"
+				size_hint: 0.4, None
+				height: dp(45)
+
+			MDButton:
+				id: employer_button
+				pos_hint: {"center_x":0.5}
+				size_hint_x: 0.6
+				on_release: root.open_employer_menu(self)
+				MDButtonText:
+					text: "Employers"

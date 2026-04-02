@@ -5,8 +5,9 @@
 """
 
 class EmployeeManager:
-    def __init__(self, worksheet):
+    def __init__(self, worksheet = None):
         self.ws = worksheet
+
 
     def _get_row_index(self, name):
         """Helper to find the row index of an employee in Column A (1)."""
@@ -15,6 +16,7 @@ class EmployeeManager:
             return names.index(name) + 1
         except ValueError:
             return None
+
 
     def add(self, name, wage="$0.00"):
         """Adds name and wage starting at Row 3."""
@@ -29,6 +31,7 @@ class EmployeeManager:
         self.ws.update(f"A{next_row}:B{next_row}", [[name, wage]])
         print(f"Added Employee {name} with wage {wage}")
 
+
     def update(self, name, new_name=None, new_wage=None):
         row = self._get_row_index(name)
         if not row:
@@ -41,6 +44,7 @@ class EmployeeManager:
         self.ws.update(f"A{row}:B{row}", [[current_name, current_wage]])
         print(f"Updated {name}'s details.")
 
+
     def delete(self, name):
         """Clears name and wage from the row."""
         row = self._get_row_index(name)
@@ -49,6 +53,7 @@ class EmployeeManager:
             self.ws.update(f"A{row}:B{row}", [["", ""]])
             print(f"Removed {name} and their wage data.")
 
+
     def get(self, name):
         row = self._get_row_index(name)
         if row:
@@ -56,11 +61,17 @@ class EmployeeManager:
             return {"name": name, "wage": wage}
         return None
 
+
     def get_names(self):
         """Returns names from Column A, skipping the TWO header rows."""
         names = self.ws.col_values(1)
         # names[2:] skips Row 1 (Title) and Row 2 (Labels)
+        
+        names_list = [n for n in names[2:] if n]
+        print(f"Employee names: {names_list}")
+
         return [n for n in names[2:] if n]
+
 
     def _exists(self, name):
         """Checks if a name already exists in the list."""

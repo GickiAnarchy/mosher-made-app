@@ -6,7 +6,7 @@
 """
 
 class EmployerManager:
-    def __init__(self, worksheet):
+    def __init__(self, worksheet = None):
         self.ws = worksheet
 
 

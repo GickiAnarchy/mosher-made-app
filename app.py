@@ -7,6 +7,8 @@ from kivymd.uix.textfield import MDTextField
 from kivymd.uix.label import MDLabel
 from kivymd.uix.list import MDList, MDListItem
 
+from kivy.clock import Clock
+
 from data import DropdownMenuHelper, EmployeeManager, EmployerManager, TimesheetManager, get_log_and_data_worksheets
 from screens.logwork_screen import LogWorkScreen
 
@@ -15,14 +17,29 @@ from screens.logwork_screen import LogWorkScreen
 
 class MosherMadeApp(MDApp):
     def __init__(self, **kwargs):
+        print("init - before super")
         super().__init__(**kwargs)
-        data_ws, log_ws = get_log_and_data_worksheets()
-        self.employee_manager = EmployeeManager(data_ws)
-        self.employer_manager = EmployerManager(data_ws)
-        self.timesheet_manager = TimesheetManager(log_ws, self.employee_manager, self.employer_manager)
+        print("init - after super")
+        self.data_ws = None
+        self.log_ws = None
+        self.get_worksheets()
+        #Clock.schedule_once(self.get_worksheets, 0)
 
 
     def build(self):
+        print("build called")
+        self.theme_cls.theme_style = "Dark"
+        self.theme_cls.primary_palette = "Green"
+
         self.screen_manager = MDScreenManager()
-        self.screen_manager.add_widget(LogWorkScreen(name="logwork"))
+        Clock.schedule_once(self.populate_screens, 1)
         return self.screen_manager
+
+
+    def populate_screens(self, dt):
+        self.screen_manager.add_widget(LogWorkScreen(name="logwork"))
+
+
+    def get_worksheets(self, dt=None):
+        self.data_ws, self.log_ws = get_log_and_data_worksheets()
+        self.timesheet_manager = TimesheetManager(self.log_ws, self.data_ws)
