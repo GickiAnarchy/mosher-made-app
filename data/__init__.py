@@ -2,7 +2,8 @@ from .sheet_utils import get_data_worksheet, get_log_worksheet, print_lists, get
 from .employeemanager import EmployeeManager
 from .employermanager import EmployerManager
 from .timesheetmanager import TimesheetManager
-from .dropdownmenu_helper import DropdownMenuHelper
+from .components.dropdownmenu_helper import DropdownMenuHelper
+from .components.checkitem import CheckItem
 
 
 
@@ -17,5 +18,6 @@ __all__ = [
     "print_lists",
     "get_all_named_ranges",
     "DropdownMenuHelper",
+    "CheckItem",
 ]
 

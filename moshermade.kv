@@ -11,16 +11,58 @@
         
         FitImage:
             source:"assets/mm_title.png"
-            size_hint: (1, None)
+            size_hint: (None, None)
+			width: self.texture_size[0]
             pos_hint: {"center_x":0.5}
-            height: dp(80)
+            height: dp(100)
             
         Widget:
-            
-            
+
+		MDButton:
+			pos_hint: {"center_x":0.5}
+			size_hint: (0.6, None)
+			height: dp(50)
+			on_release: root.manager.current = "inout"
+			MDButtonText:
+				text: "Clock In/Out"
 
 
 
+<InOutScreen>:
+	name:"inout"
+	
+	MDBoxLayout:
+		orientation:"vertical"
+		
+		MDLabel:
+			text:"Clock In/Out"
+			size_hint: (None, None)
+			width: self.texture_size[0]
+			pos_hint: {"center_x":0.5}
+			height: dp(50)
+		
+		MDFloatLayout:
+			id: check_items_container
+			size_hint: (1.0, 0.4)
+			rows: 3
+			columns: 2
+		
+		MDBoxLayout:
+			orientation:"horizontal"
+			padding: 10
+			spacing: 10
+			
+			MDButton:
+				text:"Clock In"
+				pos_hint: {"center_x":0.5}
+				size_hint_x: 0.5
+				on_release: root.clock_in()
+			
+			MDButton:
+				text:"Clock Out"
+				pos_hint: {"center_x":0.5}
+				size_hint_x: 0.5
+				on_release: root.clock_out()
 
 
 <LogWorkScreen>:
@@ -66,3 +108,26 @@
 				on_release: root.open_employer_menu(self)
 				MDButtonText:
 					text: "Employers"
+
+
+
+###
+###	COMPONENTS
+###
+
+<CheckItem>:
+	checkbox: checkbox
+	name_text: name_text
+	cb_group: cb_group
+
+	adaptive_height: True
+	
+	MDCheckbox:
+		id: checkbox
+		group: cb_group
+	
+	MDLabel:
+		text: name_text
+		adaptive_height: True
+		padding_x: "12dp"
+		pos_hint: {"center_y": 0.5}

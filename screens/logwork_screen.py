@@ -1,7 +1,6 @@
 
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.menu import MDDropdownMenu
-from kivymd.app import MDApp
 from kivymd.uix.label import MDLabel
 
 class LogWorkScreen(MDScreen):
@@ -15,7 +14,7 @@ class LogWorkScreen(MDScreen):
     
     def open_employee_menu(self, caller):
         # Fetching names from your EmployeeManager
-        names = self.app.timesheet_manager.get_employees()
+        names = self.manager.timesheet_manager.get_employees()
         print(type(names))
         
         menu_items = [
@@ -61,8 +60,3 @@ class LogWorkScreen(MDScreen):
         print(f"Selected employer: {employer_name}")
         self.ids.employer_label.text = f"Employer: {employer_name}"
         self.employer_menu.dismiss()
-
-
-    @property
-    def app(self):
-        return MDApp.get_running_app()
