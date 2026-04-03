@@ -18,6 +18,12 @@
             
         Widget:
 
+		MDBoxLayout:
+			orientation:"horizontal"
+			padding: 10
+			spacing: 10
+			
+
 		MDButton:
 			pos_hint: {"center_x":0.5}
 			size_hint: (0.6, None)
@@ -30,39 +36,54 @@
 
 <InOutScreen>:
 	name:"inout"
+	employees: getattr(root.manager, 'employee_list', [])
+	employers: getattr(root.manager, 'employer_list', [])
 	
 	MDBoxLayout:
 		orientation:"vertical"
+		padding: 15
+
+		MDBoxLayout:
+			orientation:"vertical"
+			padding: 10
+			spacing: 10
+			pos_hint: {"center_x":0.5, "top": 0.1}
 		
-		MDLabel:
-			text:"Clock In/Out"
-			size_hint: (None, None)
-			width: self.texture_size[0]
-			pos_hint: {"center_x":0.5}
-			height: dp(50)
-		
-		MDFloatLayout:
-			id: check_items_container
-			size_hint: (1.0, 0.4)
-			rows: 3
-			columns: 2
-		
+			MDLabel:
+				text:"Clock In/Out"
+				size_hint: (0.9, None)
+				halign: "center"
+				pos_hint: {"center_x":0.5}
+				height: dp(50)
+			
+			ScrollView:
+				size_hint_y: 0.4
+				MDGridLayout:
+					id: check_items_container
+					cols: 3
+					adaptive_height: True
+					padding: dp(10)
+					spacing: dp(10)
+			
 		MDBoxLayout:
 			orientation:"horizontal"
 			padding: 10
 			spacing: 10
-			
+			pos_hint: {"center_x":0.5, "top": 0.8}
+
 			MDButton:
-				text:"Clock In"
 				pos_hint: {"center_x":0.5}
 				size_hint_x: 0.5
 				on_release: root.clock_in()
+				MDButtonText:
+					text: "Clock In"
 			
 			MDButton:
-				text:"Clock Out"
 				pos_hint: {"center_x":0.5}
 				size_hint_x: 0.5
 				on_release: root.clock_out()
+				MDButtonText:
+					text: "Clock Out"
 
 
 <LogWorkScreen>:
@@ -115,19 +136,32 @@
 ###	COMPONENTS
 ###
 
+
 <CheckItem>:
 	checkbox: checkbox
-	name_text: name_text
-	cb_group: cb_group
 
 	adaptive_height: True
 	
 	MDCheckbox:
 		id: checkbox
-		group: cb_group
+		group: root.group
 	
 	MDLabel:
-		text: name_text
+		text: root.name_text
 		adaptive_height: True
 		padding_x: "12dp"
 		pos_hint: {"center_y": 0.5}
+
+
+<ButtonLabel>:
+	btn: btn
+	lbl: lbl
+
+	orientation: "horizontal"
+	padding: 10
+	spacing: 10
+
+	MDButton:
+		id: btn
+		size_hint_x: 0.3
+		on_release: root.on_release(root.btn)

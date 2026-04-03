@@ -4,6 +4,7 @@ from .employermanager import EmployerManager
 from .timesheetmanager import TimesheetManager
 from .components.dropdownmenu_helper import DropdownMenuHelper
 from .components.checkitem import CheckItem
+from .components.buttonlabel import ButtonLabel
 
 
 
@@ -19,5 +20,6 @@ __all__ = [
     "get_all_named_ranges",
     "DropdownMenuHelper",
     "CheckItem",
+    "ButtonLabel",
 ]
 

@@ -9,8 +9,20 @@ from kivy.properties import ObjectProperty,StringProperty
 
 
 class CheckItem(MDBoxLayout):
-    name_text = StringProperty()
-    cb_group = StringProperty()
+    name_text = StringProperty("")
     checkbox = ObjectProperty()
 
     
+    def __init__(self, text = "", group = "", **kwargs):
+        super().__init__(**kwargs)
+        self.name_text = text
+        self.checkbox.group = group
+    
+
+    @property
+    def group(self):
+        return self.checkbox.group
+    
+    @group.setter
+    def group(self, value):
+        self.checkbox.group = value

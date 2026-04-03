@@ -1,15 +1,17 @@
 from screens import SCREENS
 from kivymd.app import MDApp
 from kivymd.uix.screenmanager import Clock, MDScreenManager
+from kivy.properties import ListProperty
 
 
 
 class RootController(MDScreenManager):
+    employee_list = ListProperty([])
+    employer_list = ListProperty([])
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.timesheet_manager = None
-        self.employee_list = []
-        self.employer_list = []
     
     
     def build_root(self, tm):

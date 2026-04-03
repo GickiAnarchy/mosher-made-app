@@ -4,28 +4,39 @@ from kivymd.uix.label import MDLabel
 from kivymd.uix.button import MDButton,MDButtonText
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.floatlayout import MDFloatLayout
+from kivy.properties import ListProperty
 from data import CheckItem
 
 
 
 class InOutScreen(MDScreen):
+    employees = ListProperty([])
+    employers = ListProperty([])
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.check_items = []
-        self.employees = None
-        self.employers = None
 
 
     def on_enter(self):
-        self.employees = self.manager.employee_list
-        self.employers = self.manager.employer_list
+        # Explicitly sync from manager in case the binding was delayed
+        if self.manager:
+            self.employees = self.manager.employee_list
+            self.employers = self.manager.employer_list
         self.populate_check_items()
     
+    def on_employees(self, instance, value):
+        """Triggered automatically when the bound list updates."""
+        self.populate_check_items()
 
     def populate_check_items(self):
         self.ids.check_items_container.clear_widgets()
         self.check_items = []
         
+        if not self.employees:
+            print("No employees to display.")
+            return
+
         for employee in self.employees:
             check_item = CheckItem(text=employee, group="employee")
             self.ids.check_items_container.add_widget(check_item)
