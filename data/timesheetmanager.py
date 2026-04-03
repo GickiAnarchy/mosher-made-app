@@ -148,3 +148,7 @@ class TimesheetManager:
 
     def get_employers(self):
         return self.employer_manager.get_names()
+
+
+    def get_employers_data(self):
+        return self.employer_manager.get_all_employers_data()

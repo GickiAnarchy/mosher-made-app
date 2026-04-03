@@ -11,6 +11,7 @@ from kivy.clock import Clock
 
 from data import DropdownMenuHelper, EmployeeManager, EmployerManager, TimesheetManager, get_log_and_data_worksheets
 from screens.logwork_screen import LogWorkScreen
+from rootcontroller import RootController
 
 
 
@@ -23,21 +24,19 @@ class MosherMadeApp(MDApp):
         self.data_ws = None
         self.log_ws = None
         self.get_worksheets()
-        #Clock.schedule_once(self.get_worksheets, 0)
+        self.rc = RootController()
 
 
     def build(self):
         print("build called")
         self.theme_cls.theme_style = "Dark"
         self.theme_cls.primary_palette = "Green"
-
-        self.screen_manager = MDScreenManager()
         Clock.schedule_once(self.populate_screens, 1)
-        return self.screen_manager
+        return self.rc
 
 
     def populate_screens(self, dt):
-        self.screen_manager.add_widget(LogWorkScreen(name="logwork"))
+        self.rc.build_root(self.timesheet_manager)
 
 
     def get_worksheets(self, dt=None):
