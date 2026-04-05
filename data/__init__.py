@@ -1,7 +1,7 @@
-from .sheet_utils import get_data_worksheet, get_log_worksheet, print_lists, get_log_and_data_worksheets, get_all_named_ranges
-from .employeemanager import EmployeeManager
-from .employermanager import EmployerManager
-from .timesheetmanager import TimesheetManager
+from .managers.employeemanager import EmployeeManager
+from .managers.employermanager import EmployerManager
+from .managers.timesheetmanager import TimesheetManager
+from .managers.sheet_utils import SheetManager
 from .components.dropdownmenu_helper import DropdownMenuHelper
 from .components.checkitem import CheckItem
 from .components.buttonlabel import ButtonLabel
@@ -21,5 +21,6 @@ __all__ = [
     "DropdownMenuHelper",
     "CheckItem",
     "ButtonLabel",
+    "SheetManager",
 ]
 

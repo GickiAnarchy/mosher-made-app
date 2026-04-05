@@ -1,4 +1,42 @@
+<RootController>:
+	screen_manager:screen_manager
+    toolbar:toolbar
+    nav_drawer: nav_drawer
+    orientation: "vertical"
 
+	MDTopAppBar:
+		id: toolbar
+		MDTopAppBarLeadingButtonContainer:
+			MDActionTopAppBarButton:
+				icon:"menu"
+				text:"Menu"
+				on_release: nav_drawer.set_state("open")
+		MDTopAppBarTitle:
+			text:"Home"
+			pos_hint:{"center_x":0.5}
+	
+	MDNavigationLayout:
+
+		MDScreenManager:
+			id:screen_manager
+		
+		MDNavigationDrawer:
+			id: nav_drawer
+
+			MDNavigationDrawerMenu:
+
+				MDNavigationDrawerLabel:
+					text: "Navigation"
+				
+				MDNavigationDrawerItem:
+                    text: "Home"
+                    icon: "home"
+                    on_release: root.goto("home")
+				
+				MDNavigationDrawerItem:
+                    text: "Time Clock"
+                    icon: "clock"
+                    on_release: root.goto("clock")
 
 
 
@@ -19,10 +57,19 @@
         Widget:
 
 		MDBoxLayout:
+			orientation:"vertical"
+			ScrollView:
+				MDBoxLayout:
+					id:on_clock_box
+					orientation:"vertical"
+					size_hint_y:None
+					height: self.minimum_height
+					spacing: dp(20)					
+
+		MDBoxLayout:
 			orientation:"horizontal"
 			padding: 10
 			spacing: 10
-			
 
 		MDButton:
 			pos_hint: {"center_x":0.5}

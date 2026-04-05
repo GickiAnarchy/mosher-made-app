@@ -1,15 +1,23 @@
 import datetime
-from employeemanager import EmployeeManager
-from employermanager import EmployerManager 
+from data.managers.employeemanager import EmployeeManager
+from data.managers.employermanager import EmployerManager 
+from .sheet_utils import SheetManager
 
 class TimesheetManager:
-    def __init__(self, sheet_manager):
+    def __init__(self):
         """
         Initializes the TimesheetManager with a SheetManager instance.
         """
-        self.sm = sheet_manager
-        self.employee_manager = EmployeeManager(sheet_manager)
-        self.employer_manager = EmployerManager(sheet_manager)
+        self.sm = None
+        self.employee_manager = None
+        self.employer_manager = None
+        self.setup_managers()
+    
+
+    def setup_managers(self, dt = None):
+        self.sm = SheetManager()
+        self.employee_manager = EmployeeManager(self.sm.data_ws)
+        self.employer_manager = EmployerManager(self.sm.data_ws)
 
 
     """
