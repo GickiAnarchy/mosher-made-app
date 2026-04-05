@@ -10,19 +10,13 @@ from data import CheckItem
 
 
 class InOutScreen(MDScreen):
-    employees = ListProperty([])
-    employers = ListProperty([])
-
+    
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.check_items = []
 
 
     def on_enter(self):
-        # Explicitly sync from manager in case the binding was delayed
-        if self.manager:
-            self.employees = self.manager.employee_list
-            self.employers = self.manager.employer_list
         self.populate_check_items()
     
     def on_employees(self, instance, value):

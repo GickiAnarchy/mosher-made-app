@@ -37,6 +37,11 @@
                     text: "Time Clock"
                     icon: "clock"
                     on_release: root.goto("clock")
+				
+				MDNavigationDrawerItem:
+                    text: "In Out"
+                    icon: "briefcase-clock"
+                    on_release: root.goto("inout")
 
 
 
@@ -66,25 +71,9 @@
 					height: self.minimum_height
 					spacing: dp(20)					
 
-		MDBoxLayout:
-			orientation:"horizontal"
-			padding: 10
-			spacing: 10
-
-		MDButton:
-			pos_hint: {"center_x":0.5}
-			size_hint: (0.6, None)
-			height: dp(50)
-			on_release: root.manager.current = "inout"
-			MDButtonText:
-				text: "Clock In/Out"
-
-
 
 <InOutScreen>:
 	name:"inout"
-	employees: getattr(root.manager, 'employee_list', [])
-	employers: getattr(root.manager, 'employer_list', [])
 	
 	MDBoxLayout:
 		orientation:"vertical"
@@ -186,7 +175,6 @@
 
 <CheckItem>:
 	checkbox: checkbox
-
 	adaptive_height: True
 	
 	MDCheckbox:
