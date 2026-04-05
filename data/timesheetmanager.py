@@ -1,11 +1,15 @@
 import datetime
-from data import EmployeeManager, EmployerManager 
+from employeemanager import EmployeeManager
+from employermanager import EmployerManager 
 
 class TimesheetManager:
-    def __init__(self, log_worksheet, data_ws):
-        self.ws = log_worksheet
-        self.employee_manager = EmployeeManager(data_ws)
-        self.employer_manager = EmployerManager(data_ws)
+    def __init__(self, sheet_manager):
+        """
+        Initializes the TimesheetManager with a SheetManager instance.
+        """
+        self.sm = sheet_manager
+        self.employee_manager = EmployeeManager(sheet_manager)
+        self.employer_manager = EmployerManager(sheet_manager)
 
 
     """
@@ -30,7 +34,7 @@ class TimesheetManager:
             date = datetime.datetime.now().strftime("%m-%d-%Y")
 
         # Append: [Date, Employee, Employer, Type, Hours, Amount, Notes]
-        self.ws.append_row([date, employee_name, employer_name, "WORK", hours, amount, note])
+        self.sm.append_row("LOG", [date, employee_name, employer_name, "WORK", hours, amount, note])
         print(f"Logged ${amount} for {employee_name} at {employer_name}")
 
 
@@ -39,7 +43,7 @@ class TimesheetManager:
         if date is None:
             date = datetime.datetime.now().strftime("%m-%d-%Y")
 
-        self.ws.append_row([date, employee_name, "N/A", "ADVANCE", "", amount, note])
+        self.sm.append_row("LOG", [date, employee_name, "N/A", "ADVANCE", "", amount, note])
         print(f"Logged advance of ${amount} for {employee_name}")
 
 
@@ -49,7 +53,7 @@ class TimesheetManager:
             return {}
         
         """Calculates total earned, total advances, and net owed."""
-        all_records = self.ws.get_all_records()
+        all_records = self.sm.get_all_records("LOG")
         
         earned = 0
         advances = 0
@@ -80,7 +84,7 @@ class TimesheetManager:
         Deletes in reverse to maintain index integrity.
         """
         # Get all values in that specific column
-        col_values = self.ws.col_values(column_index)
+        col_values = self.sm.get_column_values("LOG", column_index)
         
         # Find all row indices that match (1-based)
         # We skip row 1 (header)
@@ -92,7 +96,7 @@ class TimesheetManager:
 
         # Delete in REVERSE order
         for row in reversed(rows_to_delete):
-            self.ws.delete_rows(row)
+            self.sm.delete_rows("LOG", row)
             
         print(f"Deleted {len(rows_to_delete)} rows matching '{value}'.")
 
@@ -100,7 +104,7 @@ class TimesheetManager:
     def delete_by_row(self, row_index):
         """Deletes a single specific row and shifts others up."""
         # Note: gspread row indices are 1-based.
-        self.ws.delete_rows(row_index)
+        self.sm.delete_rows("LOG", row_index)
         print(f"Row {row_index} deleted.")
 
 
@@ -124,19 +128,19 @@ class TimesheetManager:
 
     def clear_all_logs(self):
         """Wipes the entire sheet except for the header row safely."""
-        row_count = self.ws.row_count
+        row_count = self.sm.get_row_count("LOG")
         
         # We only delete if there are more than 1 row total.
         # This prevents the 'delete all non-frozen rows' API error.
         if row_count > 1:
             try:
                 # Delete starting from row 2 to the very last row
-                self.ws.delete_rows(2, row_count)
+                self.sm.delete_rows("LOG", 2, row_count)
                 print("All log entries have been cleared.")
             except Exception as e:
                 # If it's a size error, we can just clear the cell values instead
                 # of deleting the actual physical rows.
-                self.ws.batch_clear(["A2:Z"])
+                self.sm.batch_clear("LOG", ["A2:Z"])
                 print("Logs cleared via cell wipe.")
         else:
             print("Sheet is already empty.")

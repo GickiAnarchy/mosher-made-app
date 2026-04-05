@@ -1,94 +1,59 @@
 """
-    Employer Columns:
-        F(6): Employer Name
-        G(7): Location (optional)
-        H(8): Notes (optional)
+    Employer Columns: [Name] *Starts on row 3
+        D(4): Employer Name
 """
 
 class EmployerManager:
-    def __init__(self, worksheet = None):
-        self.ws = worksheet
-
+    def __init__(self, sheet_manager):
+        """
+        Initializes the EmployerManager with a SheetManager instance.
+        """
+        self.sm = sheet_manager
 
     def _get_row_index(self, name):
-        # Column F is index 6
-        names = self.ws.col_values(6)
+        """Helper to find the row index of an employer in Column D (4)."""
+        names = self.sm.get_column_values("DATA", 4)
         try:
             return names.index(name) + 1
         except ValueError:
             return None
 
-
-    def add(self, name, location="", notes=""):
-        # Column F is index 6
-        current_employers = self.ws.col_values(6)
-        next_row = len(current_employers) + 1
-        # Update F, G, and H
-        self.ws.update(f"F{next_row}:H{next_row}", [[name, location, notes]])
-
-
-    def get_all_employers_data(self, as_dict=True):
-        # Starts at F3 because F1 and F2 are headers in your CSV
-        data = self.ws.get("F3:H")
-        clean_data = [row for row in data if row and row[0]]
-
-        if not as_dict:
-            return clean_data
-
-        employer_list = []
-        for row in clean_data:
-            employer_list.append({
-                "name": row[0],
-                "location": row[1] if len(row) > 1 else "",
-                "notes": row[2] if len(row) > 2 else ""
-            })
-        return employer_list
-
-
-    def update(self, name, new_name=None, new_location=None, new_notes=None):
-        row = self._get_row_index(name)
-        if not row:
-            print(f"Employer {name} not found.")
-            return
+    def add(self, name):
+        """Adds an employer name starting at Row 3."""
+        # Find next empty row in Column D
+        current_names = self.sm.get_column_values("DATA", 4)
+        next_row = len(current_names) + 1
         
-        # Logic to keep existing values if new ones aren't provided
-        target_name = new_name if new_name else name
-        target_loc = new_location if new_location is not None else self.ws.cell(row, 7).value
-        target_notes = new_notes if new_notes is not None else self.ws.cell(row, 8).value
-        
-        self.ws.update(f"F{row}:H{row}", [[target_name, target_loc, target_notes]])
-        print(f"Updated Employer {name}")
-
+        # Safety: Never overwrite headers on Row 1 or 2
+        if next_row < 3:
+            next_row = 3
+            
+        self.sm.update_range("DATA", f"D{next_row}:D{next_row}", [[name]])
+        print(f"Added Employer: {name}")
 
     def delete(self, name):
+        """Clears name from the row in Column D."""
         row = self._get_row_index(name)
         if row:
-            # Clears columns F, G, and H for that row
-            self.ws.update(f"F{row}:H{row}", [["", "", ""]])
-            print(f"Deleted Employer {name}")
-
+            # We clear D to keep the list layout
+            self.sm.update_range("DATA", f"D{row}:D{row}", [[""]])
+            print(f"Removed Employer: {name}")
 
     def get_names(self):
-        """Returns a list of all employer names from Column F."""
-        names = self.ws.col_values(6)
-        # Skip the header row
-        return [name for name in names[2:] if name]
+        """Returns employer names from Column D, skipping the TWO header rows."""
+        names = self.sm.get_column_values("DATA", 4)
+        # names[2:] skips Row 1 (Title) and Row 2 (Labels)
+        names_list = [n for n in names[2:] if n]
+        return names_list
 
+    def get_all_employers_data(self):
+        """
+        Returns a list of dictionaries with employer data.
+        Currently just returns names, matching the requirements of TimesheetManager.
+        """
+        names = self.get_names()
+        return [{"name": name} for name in names]
 
     def _exists(self, name):
-        """Helper to check if an employer name already exists."""
+        """Checks if an employer name already exists in the list."""
         return name in self.get_names()
-
-
-    def get_locations(self):
-        """Returns a list of all locations only (Column G / 7)."""
-        locations = self.ws.col_values(7)
-        return [loc for loc in locations[1:] if loc]
-
-
-    def get_notes(self, name):
-        """Returns the notes (Column H / 8) for a given employer."""
-        row = self._get_row_index(name)
-        if row:
-            return self.ws.cell(row, 8).value 
-        return None

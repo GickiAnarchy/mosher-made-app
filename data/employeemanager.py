@@ -5,13 +5,13 @@
 """
 
 class EmployeeManager:
-    def __init__(self, worksheet = None):
-        self.ws = worksheet
+    def __init__(self, sheet_manager):
+        self.sm = sheet_manager
 
 
     def _get_row_index(self, name):
         """Helper to find the row index of an employee in Column A (1)."""
-        names = self.ws.col_values(1)
+        names = self.sm.get_column_values("DATA", 1)
         try:
             return names.index(name) + 1
         except ValueError:
@@ -21,14 +21,14 @@ class EmployeeManager:
     def add(self, name, wage="$0.00"):
         """Adds name and wage starting at Row 3."""
         # Find next empty row in Column A
-        current_names = self.ws.col_values(1)
+        current_names = self.sm.get_column_values("DATA", 1)
         next_row = len(current_names) + 1
         
         # Safety: Never overwrite headers on Row 1 or 2
         if next_row < 3:
             next_row = 3
             
-        self.ws.update(f"A{next_row}:B{next_row}", [[name, wage]])
+        self.sm.update_range("DATA", f"A{next_row}:B{next_row}", [[name, wage]])
         print(f"Added Employee {name} with wage {wage}")
 
 
@@ -39,9 +39,9 @@ class EmployeeManager:
             return
 
         current_name = new_name if new_name else name
-        current_wage = new_wage if new_wage is not None else self.ws.cell(row, 2).value
+        current_wage = new_wage if new_wage is not None else self.sm.get_cell_value("DATA", row, 2)
         
-        self.ws.update(f"A{row}:B{row}", [[current_name, current_wage]])
+        self.sm.update_range("DATA", f"A{row}:B{row}", [[current_name, current_wage]])
         print(f"Updated {name}'s details.")
 
 
@@ -50,21 +50,21 @@ class EmployeeManager:
         row = self._get_row_index(name)
         if row:
             # We clear A and B to keep the list layout
-            self.ws.update(f"A{row}:B{row}", [["", ""]])
+            self.sm.update_range("DATA", f"A{row}:B{row}", [["", ""]])
             print(f"Removed {name} and their wage data.")
 
 
     def get(self, name):
         row = self._get_row_index(name)
         if row:
-            wage = self.ws.cell(row, 2).value
+            wage = self.sm.get_cell_value("DATA", row, 2)
             return {"name": name, "wage": wage}
         return None
 
 
     def get_names(self):
         """Returns names from Column A, skipping the TWO header rows."""
-        names = self.ws.col_values(1)
+        names = self.sm.get_column_values("DATA", 1)
         # names[2:] skips Row 1 (Title) and Row 2 (Labels)
         
         names_list = [n for n in names[2:] if n]
