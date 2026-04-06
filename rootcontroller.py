@@ -3,6 +3,7 @@ from kivymd.uix.screenmanager import MDScreenManager
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.label import MDLabel
 from kivymd.uix.appbar import MDTopAppBar, MDTopAppBarTitle, MDActionTopAppBarButton, MDTopAppBarLeadingButtonContainer
+from kivymd.uix.navigationdrawer import MDNavigationDrawer, MDNavigationDrawerItem, MDNavigationDrawerItemText, MDNavigationDrawerItemLeadingIcon
 from kivy.properties import ObjectProperty, ListProperty
 from kivy.clock import Clock
 
@@ -29,29 +30,32 @@ class RootController(MDBoxLayout):
 
 
     def get_lists(self, dt = None):
-        self.employees = TimesheetManager.get_employees()
-        self.employers = TimesheetManager.get_employers()
+        self.employees = self.time_manager.get_employees()
+        self.employers = self.time_manager.get_employers()
 
 
     def on_employees(self, instance, value):
-        super().on_enter(instance, value)
         print("Employee list changed")
 
 
     def on_employers(self, instance, value):
-        super().on_enter(instance, value)
         print("Employer list changed")
 
 
     def goto(self, screen_name):
         self.screen_manager.current = screen_name
-        self.toolbar.title = screen_name.replace("_", " ").title()
+        
+        # In KivyMD 2.0, we find the MDTopAppBarTitle child to update the title
+        for child in self.toolbar.children:
+            if isinstance(child, MDTopAppBarTitle):
+                child.text = screen_name.replace("_", " ").title()
+                break
+
         if self.nav_drawer:
             self.nav_drawer.set_state("closed")
-
 
 #   --- App Properties ---
 
     @property
     def app(self):
-        return MDApp().get_running_app()
+        return MDApp.get_running_app()

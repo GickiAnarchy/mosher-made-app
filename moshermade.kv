@@ -14,6 +14,7 @@
 		MDTopAppBarTitle:
 			text:"Home"
 			pos_hint:{"center_x":0.5}
+			halign:"center"
 	
 	MDNavigationLayout:
 
@@ -29,21 +30,27 @@
 					text: "Navigation"
 				
 				MDNavigationDrawerItem:
-                    text: "Home"
-                    icon: "home"
-                    on_release: root.goto("home")
+					on_release: root.goto("home")
+					MDNavigationDrawerItemLeadingIcon:
+						icon: "home"
+					MDNavigationDrawerItemText:	
+						text: "Home"
 				
 				MDNavigationDrawerItem:
-                    text: "Time Clock"
-                    icon: "clock"
-                    on_release: root.goto("clock")
+					on_release: root.goto("clock")
+					MDNavigationDrawerItemLeadingIcon:
+						icon: "clock"
+					MDNavigationDrawerItemText:	
+						text: "Time Clock"
 				
 				MDNavigationDrawerItem:
-                    text: "In Out"
-                    icon: "briefcase-clock"
-                    on_release: root.goto("inout")
-
-
+					on_release: root.goto("inout")
+					MDNavigationDrawerItemLeadingIcon:
+						icon: "briefcase-clock"
+					MDNavigationDrawerItemText:	
+						text: "In Out"
+					
+				
 
 <HomeScreen>:
     name:"home"

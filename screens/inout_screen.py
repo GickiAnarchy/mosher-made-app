@@ -10,25 +10,30 @@ from data import CheckItem
 
 
 class InOutScreen(MDScreen):
-    
+    employees = ListProperty()
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.check_items = []
-
+        
 
     def on_enter(self):
-        self.populate_check_items()
+        self.update_employees()
     
+
     def on_employees(self, instance, value):
         """Triggered automatically when the bound list updates."""
-        self.populate_check_items()
+        self.update_employees()
 
-    def populate_check_items(self):
+    def update_employees(self):
         self.ids.check_items_container.clear_widgets()
         self.check_items = []
         
         if not self.employees:
             print("No employees to display.")
+            check_item = CheckItem(text="No employees found", group="None")
+            self.ids.check_items_container.add_widget(check_item)
+            self.check_items.append(check_item)
             return
 
         for employee in self.employees:

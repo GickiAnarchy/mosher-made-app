@@ -16,8 +16,8 @@ class TimesheetManager:
 
     def setup_managers(self, dt = None):
         self.sm = SheetManager()
-        self.employee_manager = EmployeeManager(self.sm.data_ws)
-        self.employer_manager = EmployerManager(self.sm.data_ws)
+        self.employee_manager = EmployeeManager(self.sm)
+        self.employer_manager = EmployerManager(self.sm)
 
 
     """
