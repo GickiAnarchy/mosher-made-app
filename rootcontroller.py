@@ -25,15 +25,17 @@ class RootController(MDBoxLayout):
     def __init__(self, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.time_manager = None
-
-        Clock.schedule_once(self.get_lists,1)
         
-
+        self.nav_drawer.disabled = True
+        self.toolbar.disabled = True
+        
 
     def get_lists(self, dt = None):
         self.time_manager = TimesheetManager()
         self.employees = self.time_manager.get_employees()
         self.employers = self.time_manager.get_employers()
+        self.nav_drawer.disabled = False
+        self.toolbar.disabled = False
         self.screen_manager.current = "home"
 
 

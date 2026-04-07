@@ -18,8 +18,6 @@
 			halign:"center"
 	
 	MDNavigationLayout:
-		
-		#gationLayout:
 
 #		
 #		canvas.before:
@@ -102,6 +100,14 @@
 			padding: 10
 			spacing: 10
 			pos_hint: {"center_x":0.5, "top": 0.1}
+			
+			canvas.before:
+			    Color:
+			        rgba: 0.1, 1, 0.3, 0.6
+			    Line:
+                    width: 5
+                    rounded_rectangle: (self.x, self.y, self.width, self.height, 25)
+
 		
 			MDLabel:
 				text:"Clock In/Out"
@@ -194,7 +200,8 @@
         
         MDBoxLayout:
             orientation:"vertical"
-            size_hint: 0.6, 0.5
+            size_hint: 0.8, 0.6
+            pos_hint:{"center_x":0.5,"center_y":0.5}
             
             SpinningLogo:
                 id:logo
@@ -203,6 +210,7 @@
             
             MDLabel:
                 text: "Loading..."
+                valign:"top"
                 halign:"center"
 
 
