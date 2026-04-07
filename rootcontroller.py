@@ -48,6 +48,7 @@ class RootController(MDBoxLayout):
         self.time_manager = tm
         self.employees = employees
         self.employers = employers
+        print(f"Employers: {self.employers}")
         self.nav_drawer.disabled = False
         self.toolbar.disabled = False
         self.screen_manager.current = "home"

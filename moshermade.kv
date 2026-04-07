@@ -74,6 +74,7 @@
 
 
 <TimeClockScreen>:
+	employers_cbs:employers_cbs
 	check_items_container: check_items_container
 	name:"clock"
 	
@@ -85,7 +86,7 @@
 			orientation:"vertical"
 			padding: 10
 			spacing: 10
-			pos_hint: {"center_x":0.5, "top": 0.1}
+			#pos_hint: {"center_x":0.5, "top": 0.1}
 			
 			canvas.before:
 			    Color:
@@ -98,7 +99,7 @@
 				text:"Clock In/Out"
 				size_hint: (0.9, None)
 				halign: "center"
-				pos_hint: {"center_x":0.5}
+				#pos_hint: {"center_x":0.5}
 				height: dp(50)
 			
 			ScrollView:
@@ -109,15 +110,35 @@
 					adaptive_height: True
 					padding: dp(10)
 					spacing: dp(10)
+		
+		MDBoxLayout:
+			orientation:"vertical"
+			padding: 10
+			spacing: 10
+			#pos_hint: {"center_x":0.5, "top": 0.1}
 			
-			MDButton:
-				style: "tonal"
-				pos_hint: {"center_x": 0.5}
-				on_release: root.open_employer_menu(self)
-				MDButtonText:
-					text: root.selected_employer
+			canvas.before:
+			    Color:
+			        rgba: 0.1, 1, 0.3, 0.6
+			    Line:
+                    width: 5
+                    rounded_rectangle: (self.x, self.y, self.width, self.height, 25)
 
-			Widget:
+			MDLabel:
+				text:"Which Employer?"
+				size_hint: (0.9, None)
+				halign: "center"
+				#pos_hint: {"center_x":0.5}
+				height: dp(50)
+			
+			ScrollView:
+				size_hint_y: 0.4
+				MDGridLayout:
+					id: employers_cbs
+					cols: 3
+					adaptive_height: True
+					padding: dp(10)
+					spacing: dp(10)
 
 		MDBoxLayout:
 			orientation:"horizontal"

@@ -21,7 +21,7 @@ class EmployerManager:
     def add(self, name):
         """Adds an employer name starting at Row 3."""
         # Find next empty row in Column D
-        current_names = self.sm.get_column_values("DATA", 4)
+        current_names = self.sm.get_column_values("DATA", 6)
         next_row = len(current_names) + 1
         
         # Safety: Never overwrite headers on Row 1 or 2
@@ -36,12 +36,12 @@ class EmployerManager:
         row = self._get_row_index(name)
         if row:
             # We clear D to keep the list layout
-            self.sm.update_range("DATA", f"D{row}:D{row}", [[""]])
+            self.sm.update_range("DATA", f"F{row}:F{row}", [[""]])
             print(f"Removed Employer: {name}")
 
     def get_names(self):
         """Returns employer names from Column D, skipping the TWO header rows."""
-        names = self.sm.get_column_values("DATA", 4)
+        names = self.sm.get_column_values("DATA", 6)
         # names[2:] skips Row 1 (Title) and Row 2 (Labels)
         names_list = [n for n in names[2:] if n]
         return names_list

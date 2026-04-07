@@ -15,33 +15,32 @@ from data import CheckItem
 
 
 class TimeClockScreen(MDScreen):
-    clocked_in_employees = DictProperty()
-
     employees = ListProperty()
+    clocked_in_employees = DictProperty()
     check_items = ListProperty()
     
     employers = ListProperty()
+    selected_employer = StringProperty("Select Employer")
     employers_cbs = ObjectProperty()
     employers_boxes = ListProperty()
+
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         
 
     def on_pre_enter(self):
-        Clock.schedule_once(self.setup_ui, 2)
+        Clock.schedule_once(self.setup_ui, 1)
         
         
     def setup_ui(self, dt=None):
-        self.get_currently_clocked_in()
         try:
             self.employees = self.app.rc.employees
             self.employers = self.app.rc.employers
         except Exception as e:
             print(e)
-        #self.update_employees()
-        #self.update_employers()
-    
+        self.get_currently_clocked_in()
+
 
     def get_currently_clocked_in(self):
         if os.path.exists("clocked_in.json"):
@@ -55,12 +54,12 @@ class TimeClockScreen(MDScreen):
     def on_employees(self, instance, value):
         """Triggered automatically when the bound list updates."""
         self.update_employees()
-    
-    
+
+
     def on_employers(self, instance, value):
         print("in on_employers()")
         """Triggered automatically when the bound list updates."""
-        self.update_employers()
+        self.setup_employers()
 
 
     def update_employees(self):
@@ -71,21 +70,20 @@ class TimeClockScreen(MDScreen):
             print("No employees to display.")
             check_item = CheckItem(text="No employees found")
             self.ids.check_items_container.add_widget(check_item)
-            #self.check_items.append(check_item)
+            self.check_items.append(check_item)
             return
 
         for employee in self.employees:
             check_item = CheckItem(text=employee)
-            if employee in self.clocked_in_employees.keys():
+            if employee in self.clocked_in_employees:
                 check_item.checkbox.active = True
             self.ids.check_items_container.add_widget(check_item)
             self.check_items.append(check_item)
 
 
-    def update_employers(self):
+    def setup_employers(self):
         print(f"Employers found: {self.employers}")
         for emp in self.employers:
-            print(emp)
             ecb = CheckItem(text = emp, group = "employer")
             self.employers_cbs.add_widget(ecb)
             self.employers_boxes.append(ecb)
@@ -95,8 +93,8 @@ class TimeClockScreen(MDScreen):
         for item in self.employers_boxes:
             if item.checkbox.active:
                 return item.name_text
-        return "No Employer"
-
+        return None
+        
 
     def get_selected_employees(self):
         """Returns a list of employee names that are currently checked."""
@@ -124,7 +122,7 @@ class TimeClockScreen(MDScreen):
 
     def handle_clock_out(self):
         """Example trigger method to be called from a button in your KV file."""
-        if self.get_selected_employer() == "No Employer":
+        if self.selected_employer == "Select Employer":
             print("Error: No employer selected.")
             return
 
@@ -151,12 +149,9 @@ class TimeClockScreen(MDScreen):
         # Update the file after removing employees
         with open("clocked_in.json", "w") as f:
             json.dump(dict(self.clocked_in_employees), f)
-        
-        self.employers_cbs.clear_widgets()
-        
+
         print(f"Clocking out: {selected}")
         self.update_employees()
-        self.update_employers()
 
 
     @property

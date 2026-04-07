@@ -29,6 +29,7 @@ class MosherMadeApp(MDApp):
         self.rc = RootController()
         self.theme_cls.theme_style = "Dark"
         self.theme_cls.primary_palette = "Green"
+        
         for cls, name in SCREENS:
             self.rc.screen_manager.add_widget(cls(name = name))
         
