@@ -1,0 +1,78 @@
+name: Build Android APK
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    # Optionally trigger only if you include [apk] in your commit message
+    if: contains(github.event.head_commit.message, '[apk]')
+    runs-on: ubuntu-22.04
+
+    steps:
+      # Checkout the repo
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Set up Python
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      # Set up Java (required by Buildozer for Android)
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      # Install essential Linux dependencies
+      - name: Install Linux dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            zip \
+            unzip \
+            git \
+            libffi-dev \
+            libssl-dev \
+            libsqlite3-dev \
+            zlib1g-dev \
+            libncurses5 \
+            libtinfo5 \
+            build-essential \
+            uuid-dev \
+            liblzma-dev
+
+      # Install Buildozer and Cython (pin versions)
+      - name: Install Buildozer (pinned)
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install buildozer==1.5.0 "cython<3.0"
+
+      # Clean any caches from previous builds
+      - name: Clean build caches
+        run: |
+          rm -rf ~/.buildozer ~/.android ~/.gradle
+
+      # Verify the environment
+      - name: Verify environment
+        run: |
+          python --version
+          java -version
+          buildozer --version
+
+      # Build the APK
+      - name: Build APK
+        run: |
+          buildozer android debug
+
+      # Upload the APK as an artifact
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: MosherLawnsClock-APK
+          path: bin/*.apk
