@@ -17,12 +17,13 @@ class CheckItem(MDBoxLayout):
         super().__init__(**kwargs)
         self.name_text = text
         self.checkbox.group = group
-    
+
 
     @property
     def group(self):
         return self.checkbox.group
-    
+
+
     @group.setter
     def group(self, value):
         self.checkbox.group = value

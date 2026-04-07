@@ -52,14 +52,13 @@ class RootController(MDBoxLayout):
             self.screen_manager.current = screen_name
         except Exception as e:
             print(e)
-            return
-        
+            return        
         # In KivyMD 2.0, we find the MDTopAppBarTitle child to update the title
-        for child in self.toolbar.children:
-            if isinstance(child, MDTopAppBarTitle):
-                child.text = screen_name.replace("_", " ").title()
-                break
-
+        #for child in self.toolbar.children:
+#            if isinstance(child, MDTopAppBarTitle):
+#                child.text = screen_name.replace("_", " ").title()
+#                break
+        self.toolbar.title = screen_name.replace("_"," ").title()
         if self.nav_drawer:
             self.nav_drawer.set_state("closed")
 

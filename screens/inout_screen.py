@@ -23,7 +23,7 @@ class InOutScreen(MDScreen):
             self.employees = MDApp.get_running_app().rc.employees
         except Exception as e:
             print(e)
-                
+
         self.update_employees()
     
 
@@ -46,3 +46,4 @@ class InOutScreen(MDScreen):
             check_item = CheckItem(text=employee, group="employee")
             self.ids.check_items_container.add_widget(check_item)
             self.check_items.append(check_item)
+            

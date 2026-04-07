@@ -6,7 +6,7 @@ class SpinningLogo(Image):
     angle = NumericProperty(0)
 
     def spin(self, dt=None):
-        r1 = Animation(angle=360, duration=5)
+        r1 = Animation(angle=360, duration=3)
         
         def reset(*args):
             self.angle = 0
