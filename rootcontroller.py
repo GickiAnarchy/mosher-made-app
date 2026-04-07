@@ -24,14 +24,17 @@ class RootController(MDBoxLayout):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args,**kwargs)
-        self.time_manager = TimesheetManager()
+        self.time_manager = None
 
         Clock.schedule_once(self.get_lists,1)
+        
 
 
     def get_lists(self, dt = None):
+        self.time_manager = TimesheetManager()
         self.employees = self.time_manager.get_employees()
         self.employers = self.time_manager.get_employers()
+        self.screen_manager.current = "home"
 
 
     def on_employees(self, instance, value):
@@ -43,7 +46,11 @@ class RootController(MDBoxLayout):
 
 
     def goto(self, screen_name):
-        self.screen_manager.current = screen_name
+        try:
+            self.screen_manager.current = screen_name
+        except Exception as e:
+            print(e)
+            return
         
         # In KivyMD 2.0, we find the MDTopAppBarTitle child to update the title
         for child in self.toolbar.children:

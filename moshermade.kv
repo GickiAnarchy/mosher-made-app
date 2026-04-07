@@ -6,10 +6,11 @@
 
 	MDTopAppBar:
 		id: toolbar
+		size_hint_y: None
+		height: dp(50)
 		MDTopAppBarLeadingButtonContainer:
 			MDActionTopAppBarButton:
 				icon:"menu"
-				text:"Menu"
 				on_release: nav_drawer.set_state("open")
 		MDTopAppBarTitle:
 			text:"Home"
@@ -17,7 +18,17 @@
 			halign:"center"
 	
 	MDNavigationLayout:
+		
+		#gationLayout:
 
+#		
+#		canvas.before:
+#    		Color:
+#                rgba: 0.2, 0.5, 0.2, 1
+#            RoundedRectangle:
+#                pos: self.pos
+#     
+                
 		MDScreenManager:
 			id:screen_manager
 		
@@ -172,6 +183,27 @@
 				on_release: root.open_employer_menu(self)
 				MDButtonText:
 					text: "Employers"
+
+
+<LoadingScreen>:
+    logo:logo
+    name:"loading"
+    
+    MDBoxLayout:
+        orientation:"vertical"
+        
+        MDBoxLayout:
+            orientation:"vertical"
+            size_hint: 0.6, 0.5
+            
+            SpinningLogo:
+                id:logo
+                source:"assets/icon.png"
+                pos_hint: {"center_x": 0.5}
+            
+            MDLabel:
+                text: "Loading..."
+                halign:"center"
 
 
 

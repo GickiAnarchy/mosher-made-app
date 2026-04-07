@@ -5,6 +5,7 @@ from .managers.sheet_utils import SheetManager
 from .components.dropdownmenu_helper import DropdownMenuHelper
 from .components.checkitem import CheckItem
 from .components.buttonlabel import ButtonLabel
+from .components.spinlogo import SpinningLogo
 
 
 
@@ -22,5 +23,6 @@ __all__ = [
     "CheckItem",
     "ButtonLabel",
     "SheetManager",
+    "SpinningLogo",
 ]
 

@@ -31,6 +31,8 @@ class MosherMadeApp(MDApp):
         self.theme_cls.primary_palette = "Green"
         for cls, name in SCREENS:
             self.rc.screen_manager.add_widget(cls(name = name))
+        
+        self.rc.screen_manager.current = "loading"
         return self.rc
 
 
