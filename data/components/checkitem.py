@@ -13,7 +13,7 @@ class CheckItem(MDBoxLayout):
     checkbox = ObjectProperty()
 
     
-    def __init__(self, text = "", group = "", **kwargs):
+    def __init__(self, text = "", group = None, **kwargs):
         super().__init__(**kwargs)
         self.name_text = text
         self.checkbox.group = group

@@ -1,3 +1,4 @@
+import threading
 from kivymd.app import MDApp
 from kivymd.uix.screenmanager import MDScreenManager
 from kivymd.uix.boxlayout import MDBoxLayout
@@ -31,9 +32,22 @@ class RootController(MDBoxLayout):
         
 
     def get_lists(self, dt = None):
-        self.time_manager = TimesheetManager()
-        self.employees = self.time_manager.get_employees()
-        self.employers = self.time_manager.get_employers()
+        def fetch_data():
+            # Blocking network calls happen in this background thread
+            tm = TimesheetManager()
+            employees = tm.get_employees()
+            employers = tm.get_employers()
+            
+            # Schedule UI updates back on the main thread
+            Clock.schedule_once(lambda x: self._finalize_data(tm, employees, employers))
+
+        threading.Thread(target=fetch_data, daemon=True).start()
+
+
+    def _finalize_data(self, tm, employees, employers):
+        self.time_manager = tm
+        self.employees = employees
+        self.employers = employers
         self.nav_drawer.disabled = False
         self.toolbar.disabled = False
         self.screen_manager.current = "home"
@@ -52,12 +66,7 @@ class RootController(MDBoxLayout):
             self.screen_manager.current = screen_name
         except Exception as e:
             print(e)
-            return        
-        # In KivyMD 2.0, we find the MDTopAppBarTitle child to update the title
-        #for child in self.toolbar.children:
-#            if isinstance(child, MDTopAppBarTitle):
-#                child.text = screen_name.replace("_", " ").title()
-#                break
+            return
         self.toolbar.title = screen_name.replace("_"," ").title()
         if self.nav_drawer:
             self.nav_drawer.set_state("closed")

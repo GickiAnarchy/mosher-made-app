@@ -19,12 +19,42 @@ class TimesheetManager:
         self.employee_manager = EmployeeManager(self.sm)
         self.employer_manager = EmployerManager(self.sm)
 
+    def get_current_time(self):
+        """Returns the current time in HH:MM (24-hour) format."""
+        return datetime.datetime.now().strftime("%H:%M")
+
+    def get_current_date(self):
+        """Returns the current date in MM/DD/YYYY format."""
+        return datetime.datetime.now().strftime("%m/%d/%Y")
+
 
     """
     LOG worksheet columns: [Date, Employee, Employer, Type, Hours, Amount, Notes]
     Type can be "WORK" or "ADVANCE"
     Note: It would be cleaner to pass the date with each log method, but for simplicity we can default to current date if not provided.
     """
+
+    def log_shift(self, date, employee_name, employer_name, time_in, time_out, note=""):
+        """
+        Takes shift details, calculates duration, and logs work to the spreadsheet.
+        Expected time format is 'HH:MM' (24-hour).
+        """
+        if date is None:
+            date = self.get_current_date()
+        fmt = '%H:%M'
+        try:
+            t_in = datetime.datetime.strptime(time_in, fmt)
+            t_out = datetime.datetime.strptime(time_out, fmt)
+            
+            delta = t_out - t_in
+            hours = delta.total_seconds() / 3600
+            
+            if hours < 0: # Midnight crossover logic
+                hours += 24
+
+            self.log_work(date, employee_name, employer_name, round(hours, 2), note)
+        except ValueError as e:
+            print(f"Time parsing error for {employee_name}: {e}. Use HH:MM.")
 
     # Logging methods
 
@@ -39,7 +69,7 @@ class TimesheetManager:
         wage = float(employee_data['wage'].replace('$', '').replace(',', ''))
         amount = hours * wage
         if date is None:
-            date = datetime.datetime.now().strftime("%m-%d-%Y")
+            date = self.get_current_date()
 
         # Append: [Date, Employee, Employer, Type, Hours, Amount, Notes]
         self.sm.append_row("LOG", [date, employee_name, employer_name, "WORK", hours, amount, note])
@@ -49,7 +79,7 @@ class TimesheetManager:
     def log_advance(self, date, employee_name, amount, note="Cash Advance"):
         """Logs a pay advance (deduction)."""
         if date is None:
-            date = datetime.datetime.now().strftime("%m-%d-%Y")
+            date = self.get_current_date()
 
         self.sm.append_row("LOG", [date, employee_name, "N/A", "ADVANCE", "", amount, note])
         print(f"Logged advance of ${amount} for {employee_name}")

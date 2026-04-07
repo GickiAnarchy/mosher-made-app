@@ -1,21 +1,18 @@
 from .home_screen import HomeScreen
-from .logwork_screen import LogWorkScreen
-from .inout_screen import InOutScreen
+from .timeclock_screen import TimeClockScreen
 from .loading_screen import LoadingScreen
 
 
 
 SCREENS = [
     (HomeScreen, "home"),
-    (LogWorkScreen, "logwork"),
-    (InOutScreen, "inout"),
+    (TimeClockScreen, "clock"),
     (LoadingScreen, "loading"),
     ]
 
 
 __all__ = [
-    "LogWorkScreen",
     "HomeScreen",
-    "InOutScreen",
+    "TimeClockScreen",
     "LoadingScreen",
     ]

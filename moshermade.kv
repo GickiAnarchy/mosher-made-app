@@ -35,24 +35,16 @@
 					on_release: root.goto("home")
 					MDNavigationDrawerItemLeadingIcon:
 						icon: "home"
-					MDNavigationDrawerItemText:	
+					MDNavigationDrawerItemText:
 						text: "Home"
-				
+
 				MDNavigationDrawerItem:
-					on_release: root.goto("clock")
+				    on_release: root.goto("clock")
 					MDNavigationDrawerItemLeadingIcon:
 						icon: "clock"
-					MDNavigationDrawerItemText:	
-						text: "Time Clock"
-				
-				MDNavigationDrawerItem:
-					on_release: root.goto("inout")
-					MDNavigationDrawerItemLeadingIcon:
-						icon: "briefcase-clock"
-					MDNavigationDrawerItemText:	
-						text: "In Out"
-					
-				
+					MDNavigationDrawerItemText:
+						text: "Clock"
+
 
 <HomeScreen>:
     name:"home"
@@ -81,8 +73,9 @@
 					spacing: dp(20)					
 
 
-<InOutScreen>:
-	name:"inout"
+<TimeClockScreen>:
+	check_items_container: check_items_container
+	name:"clock"
 	
 	MDBoxLayout:
 		orientation:"vertical"
@@ -101,7 +94,6 @@
                     width: 5
                     rounded_rectangle: (self.x, self.y, self.width, self.height, 25)
 
-		
 			MDLabel:
 				text:"Clock In/Out"
 				size_hint: (0.9, None)
@@ -118,6 +110,15 @@
 					padding: dp(10)
 					spacing: dp(10)
 			
+			MDButton:
+				style: "tonal"
+				pos_hint: {"center_x": 0.5}
+				on_release: root.open_employer_menu(self)
+				MDButtonText:
+					text: root.selected_employer
+
+			Widget:
+
 		MDBoxLayout:
 			orientation:"horizontal"
 			padding: 10
@@ -127,61 +128,16 @@
 			MDButton:
 				pos_hint: {"center_x":0.5}
 				size_hint_x: 0.5
-				on_release: root.clock_in()
+				on_release: root.handle_clock_in()
 				MDButtonText:
 					text: "Clock In"
 			
 			MDButton:
 				pos_hint: {"center_x":0.5}
 				size_hint_x: 0.5
-				on_release: root.clock_out()
+				on_release: root.handle_clock_out()
 				MDButtonText:
 					text: "Clock Out"
-
-
-<LogWorkScreen>:
-	name:"logwork"
-	
-	MDBoxLayout:
-		orientation:"vertical"
-		
-		MDBoxLayout:
-			orientation:"horizontal"
-			padding: 10
-			spacing: 10
-
-			MDLabel:
-				id:employee_label
-				text:"Employee:"
-				size_hint: 0.4, None
-				height: dp(45)
-
-			MDButton:
-				id: employee_button
-				pos_hint: {"center_x":0.5}
-				size_hint_x: 0.6
-				on_release: root.open_employee_menu(self)
-				MDButtonText:
-					text: "Employees"
-
-		MDBoxLayout:
-			orientation:"horizontal"
-			padding: 10
-			spacing: 10
-
-			MDLabel:
-				id:employer_label
-				text:"Employer:"
-				size_hint: 0.4, None
-				height: dp(45)
-
-			MDButton:
-				id: employer_button
-				pos_hint: {"center_x":0.5}
-				size_hint_x: 0.6
-				on_release: root.open_employer_menu(self)
-				MDButtonText:
-					text: "Employers"
 
 
 <LoadingScreen>:
