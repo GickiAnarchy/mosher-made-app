@@ -27,7 +27,7 @@ source.include_exts = py,png,jpg,jpeg,kv,atlas,json,txt
 # - lzma: missing lzma.h header
 # - uuid: missing libuuid library  
 # - grp: POSIX functions not available on Android
-requirements = python3,kivy,kivymd,requests,certifi,python-dotenv,openssl,pillow,gspread, threading 
+requirements = python3,kivy,kivymd,requests,certifi,python-dotenv,openssl,pillow,gspread
 
 # (str) Application versioning (method 2)
 #version.filename = %(source.dir)s/main.py
