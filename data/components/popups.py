@@ -9,30 +9,27 @@ from kivy.animation import Animation
 
 
 class CreateDialog(MDDialog):
-txt = StringProperty("Create")
-on_confirm = ObjectProperty(None) #the callback
-message = ObjectProperty()
-create_type = StringProperty("")
-create_field = ObjectProperty()
+    txt = StringProperty("Create")
+    on_confirm = ObjectProperty(None)  # the callback
+    message = ObjectProperty()
+    create_type = StringProperty("")
+    create_field = ObjectProperty()
 
+    # Fade in
+    def open(self, *args, **kwargs):
+        super().open(*args, **kwargs)
+        Animation(opacity=1, duration=0.3).start(self)
 
-# Fade in
-def open(self, *args, **kwargs):
-super().open(*args, **kwargs)
-Animation(opacity = 1, duration = 0.3).start(self)
+    # Fade out
+    def fade_dismiss(self, *args):
+        anim = Animation(opacity=0, duration=0.6)
+        anim.bind(on_complete=lambda *x: self.dismiss)
+        anim.start(self)
 
-# Fade out
-def fade_dismiss(self, *args):
-anim = Animation(opacity = 0, duration = 0.6)
-anim.bind(on_complete = lambda *x: self.dismiss)
-anim.start(self)
-
-def _yes_pressed(self, *args):
-if self.on_confirm:
-self.on_confirm()
-self.fade_dismiss()
-
-
+    def _yes_pressed(self, *args):
+        if self.on_confirm:
+            self.on_confirm()
+            self.fade_dismiss()
 
 """
 def __init__(self, **kwargs):
