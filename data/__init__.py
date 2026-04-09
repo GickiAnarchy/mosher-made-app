@@ -6,6 +6,7 @@ from .components.dropdownmenu_helper import DropdownMenuHelper
 from .components.checkitem import CheckItem
 from .components.buttonlabel import ButtonLabel
 from .components.spinlogo import SpinningLogo
+from .security.verify_creds import verify_service_account
 
 
 
@@ -14,15 +15,11 @@ __all__ = [
     "EmployeeManager",
     "EmployerManager",
     "TimesheetManager",
-    "get_data_worksheet",
-    "get_log_worksheet",
-    "get_log_and_data_worksheets",
-    "print_lists",
-    "get_all_named_ranges",
     "DropdownMenuHelper",
     "CheckItem",
     "ButtonLabel",
     "SheetManager",
     "SpinningLogo",
+    "verify_service_account",
 ]
 
