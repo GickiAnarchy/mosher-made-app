@@ -1,3 +1,6 @@
+import os
+import json
+
 from kivymd.material_resources import dp
 
 from kivymd.app import MDApp
@@ -14,13 +17,14 @@ from kivy.clock import Clock
 
 from rootcontroller import RootController
 from screens import SCREENS
-
+from data import verify_service_account
 
 
 class MosherMadeApp(MDApp):
     def __init__(self, **kwargs):
         print("init - before super")
         super().__init__(**kwargs)
+        self.key_is_valid = False
         print("init - after super")
 
 
@@ -30,10 +34,16 @@ class MosherMadeApp(MDApp):
         self.theme_cls.theme_style = "Dark"
         self.theme_cls.primary_palette = "Green"
         
+        #Clock.schedule_once(self.verify_creds, 1)
+        
         for cls, name in SCREENS:
             self.rc.screen_manager.add_widget(cls(name = name))
-        
-        self.rc.screen_manager.current = "loading"
+        if os.path.exists("creds.json"):
+            self.rc.screen_manager.current = "loading"
+        else:
+            self.rc.screen_manager.current = "needkey"
         return self.rc
 
 
+    def on_start(self):
+        self.fps_monitor_start()

@@ -184,6 +184,34 @@
                 halign:"center"
 
 
+<InputKeyScreen>:
+    creds_field:creds_field
+    
+    name:"needkey"
+    
+    MDBoxLayout:
+        orientation:"vertical"
+        
+        MDLabel:
+            text:"Enter the Google Service Account Credentials"
+            halign:"center"
+    
+        MDTextField:
+            id: creds_field
+            multiline: True
+            size_hint: 0.8, 0.8
+            pos_hint:{"center_x":0.5}
+            
+        MDButton:
+            on_release:root.check_creds()
+            size_hint: 0.4, None
+            height: dp(40)
+            pos_hint:{"center_x":0.5}
+            
+            MDButtonText:
+                text: "Check Credentials"
+
+
 
 ###
 ###	COMPONENTS
