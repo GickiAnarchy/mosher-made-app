@@ -5,11 +5,12 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.label import MDLabel
 from kivymd.uix.appbar import MDTopAppBar, MDTopAppBarTitle, MDActionTopAppBarButton, MDTopAppBarLeadingButtonContainer
 from kivymd.uix.navigationdrawer import MDNavigationDrawer, MDNavigationDrawerItem, MDNavigationDrawerItemText, MDNavigationDrawerItemLeadingIcon
-from kivy.properties import ObjectProperty, ListProperty
+from kivy.properties import ObjectProperty, ListProperty, BooleanProperty
 from kivy.clock import Clock
 
 from data import TimesheetManager, EmployeeManager, EmployerManager
 from screens import SCREENS
+from data import verify_service_account
 
 
 class RootController(MDBoxLayout):
@@ -19,6 +20,7 @@ class RootController(MDBoxLayout):
     toolbar = ObjectProperty()
 
     # DATA
+    valid_key = BooleanProperty(False)
     employees = ListProperty([])
     employers = ListProperty([])
 
@@ -29,9 +31,14 @@ class RootController(MDBoxLayout):
         
         self.nav_drawer.disabled = True
         self.toolbar.disabled = True
-        
 
-    def get_lists(self, dt = None):
+
+    def verify_creds(self):
+        def _verify():
+            self.valid_key = verify_service_account()
+        threading.Thread(target=_verify, daemon=True).start()
+
+    def get_lists(self):
         def fetch_data():
             # Blocking network calls happen in this background thread
             tm = TimesheetManager()

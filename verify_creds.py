@@ -6,9 +6,9 @@ from google.auth.exceptions import DefaultCredentialsError
 
 
    
-def verify_service_account():
+def verify_service_account() -> bool:
     try:
-        with open("creds.json","r") as  f:
+        with open("data/security/creds.json","r") as  f:
             info = json.load(f)
     except Exception as e:
         print(e)

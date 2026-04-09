@@ -15,7 +15,11 @@ class LoadingScreen(MDScreen):
 
 
     def on_enter(self):
-        Clock.schedule_once(self.app.rc.get_lists,2)
+        self.app.rc.verify_creds()
+        if self.app.rc.valid_key:
+            self.app.rc.get_lists()
+        else:
+            self.app.rc.screen_manager.current = "needkey"
 
 
     @property
