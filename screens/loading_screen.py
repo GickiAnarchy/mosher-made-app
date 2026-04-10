@@ -19,13 +19,14 @@ class LoadingScreen(MDScreen):
 
     def on_enter(self):
         print("loading_screen.on_enter()")
+        self.try_verify()
     
 
     def try_verify(self):
         def vsa():
             with open("creds.json","r") as f:
                 info = json.load(f)
-            self.app.rc.verify_service_account(info, False)
+            self.app.rc.verify_service_account(info, is_test = False)
         threading.Thread(target=vsa, daemon=True).start()
 
 

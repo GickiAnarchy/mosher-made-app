@@ -29,7 +29,7 @@ class TimeClockScreen(MDScreen):
         
 
     def on_pre_enter(self):
-        Clock.schedule_once(self.setup_ui, 2)
+        Clock.schedule_once(self.setup_ui)
         
         
     def setup_ui(self, dt=None):
@@ -127,14 +127,11 @@ class TimeClockScreen(MDScreen):
         if self.get_selected_employer() == "No Employer":
             print("Error: No employer selected.")
             return
-
         selected = self.get_selected_employees()
         clock_out_time = self.app.rc.time_manager.get_current_time()
-
         if not selected:
             print("No employees selected for Clock Out.")
             return
-
         for employee in selected:
             if employee in self.clocked_in_employees:
                 clock_in_time = self.clocked_in_employees[employee]
@@ -145,19 +142,18 @@ class TimeClockScreen(MDScreen):
                     time_in=clock_in_time, 
                     time_out=clock_out_time
                 )
-
                 del self.clocked_in_employees[employee]
-        
+    
         # Update the file after removing employees
         with open("clocked_in.json", "w") as f:
-            json.dump(dict(self.clocked_in_employees), f)
-        
+            json.dump(dict(self.clocked_in_employees), f)    
         self.employers_cbs.clear_widgets()
-        
         print(f"Clocking out: {selected}")
         self.update_employees()
         self.update_employers()
 
+
+#   --- App Properties ---
 
     @property
     def app(self):

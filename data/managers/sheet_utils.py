@@ -6,7 +6,7 @@ class SheetManager:
     Centralized manager for Google Sheets API communication.
     Acts as the single source of truth for spreadsheet data.
     """
-    def __init__(self, credentials_path='data/security/creds.json', spreadsheet_name="MosherMade_Sheet"):
+    def __init__(self, credentials_path='creds.json', spreadsheet_name="MosherMade_Sheet"):
         self.gc = gspread.service_account(filename=credentials_path)
         self.sh = self.gc.open(spreadsheet_name)
         self._worksheets = {}

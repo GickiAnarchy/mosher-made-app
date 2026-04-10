@@ -34,6 +34,8 @@ class RootController(MDBoxLayout):
         self.time_manager = None
         self.nav_drawer.disabled = True
         self.toolbar.disabled = True
+        self.valid_key = False
+
         
     def on_enter(self):
         pass
@@ -75,8 +77,7 @@ class RootController(MDBoxLayout):
         except Exception as e:
             print(e)
             return
-        self.toolbar.title = screen_name.replace("_"," ").title()
-        self.toolbar_title.text = screen_name.replace("_"," ").title()
+        self.ids.toolbar_title.text = screen_name.replace("_"," ").title()
         if self.nav_drawer:
             self.nav_drawer.set_state("closed")
 
@@ -103,7 +104,7 @@ class RootController(MDBoxLayout):
             
             # This triggers a refresh/validation check
             print(f"Success! Authenticated as: {creds.service_account_email}")
-            if not is_test:
+            if is_test is False:
                 self.valid_key = True
             return True
         except Exception as e:
