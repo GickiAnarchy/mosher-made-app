@@ -23,8 +23,11 @@ class InputKeyScreen(MDScreen):
     def on_is_valid(self, instance, value):
         if value is True:
             print("restarting, valid creds")
-            with open("creds.json","w") as f:
-                json.dump(dict(self.creds_field.text), f)
+            # Ensure directory exists
+            os.makedirs("data/security", exist_ok=True)
+            with open("data/security/creds.json", "w") as f:
+                # creds_field.text is already a JSON string, write it directly
+                f.write(self.creds_field.text)
     
 
     @property

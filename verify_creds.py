@@ -6,13 +6,24 @@ from google.auth.exceptions import DefaultCredentialsError
 
 
    
-def verify_service_account():
+def verify_service_account(info=None):
+    """
+    Verifies Google Service Account credentials.
+    'info' can be a dictionary or a JSON string.
+    If None, it attempts to load from the default local file.
+    """
     try:
-        with open("creds.json","r") as  f:
-            info = json.load(f)
+        if info is None:
+            with open("data/security/creds.json", "r") as f:
+                info = json.load(f)
+        
+        if isinstance(info, str):
+            info = json.loads(info)
+            
     except Exception as e:
-        print(e)
+        print(f"Credential Load Error: {e}")
         return False
+
     try:
         # 1. Attempt to create credentials object
         creds = service_account.Credentials.from_service_account_info(info)
