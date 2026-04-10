@@ -6,7 +6,6 @@ from kivy.properties import ListProperty
 
 
 class RootScreenManager(MDScreenManager):
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.scrn_names = []

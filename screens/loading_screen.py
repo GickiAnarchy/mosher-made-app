@@ -1,4 +1,5 @@
 import threading
+import json
 from kivymd.app import MDApp
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.label import MDLabel
@@ -22,7 +23,9 @@ class LoadingScreen(MDScreen):
 
     def try_verify(self):
         def vsa():
-            self.app.rc.verify_service_account()
+            with open("creds.json","r") as f:
+                info = json.load(f)
+            self.app.rc.verify_service_account(info, False)
         threading.Thread(target=vsa, daemon=True).start()
 
 
@@ -30,8 +33,7 @@ class LoadingScreen(MDScreen):
         self.try_verify()
 
 
-
-
     @property
     def app(self):
         return MDApp.get_running_app()
+
