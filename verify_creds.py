@@ -6,7 +6,7 @@ from google.auth.exceptions import DefaultCredentialsError
 
 
    
-def verify_service_account(info=None) -> bool:
+def verify_service_account(info=None):
     """
     Verifies Google Service Account credentials.
     'info' can be a dictionary or a JSON string.

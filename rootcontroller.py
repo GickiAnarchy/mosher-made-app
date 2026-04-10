@@ -1,6 +1,10 @@
 import threading
+import json
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
+from google.auth.exceptions import DefaultCredentialsError
+
 from kivymd.app import MDApp
-from kivymd.uix.screenmanager import MDScreenManager
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.label import MDLabel
 from kivymd.uix.appbar import MDTopAppBar, MDTopAppBarTitle, MDActionTopAppBarButton, MDTopAppBarLeadingButtonContainer
@@ -8,9 +12,8 @@ from kivymd.uix.navigationdrawer import MDNavigationDrawer, MDNavigationDrawerIt
 from kivy.properties import ObjectProperty, ListProperty, BooleanProperty
 from kivy.clock import Clock
 
-from data import TimesheetManager, EmployeeManager, EmployerManager
-from screens import SCREENS
-from data import verify_service_account
+from data import TimesheetManager
+from rootscreenmanager import RootScreenManager
 
 
 class RootController(MDBoxLayout):
@@ -18,6 +21,7 @@ class RootController(MDBoxLayout):
     screen_manager = ObjectProperty()
     nav_drawer = ObjectProperty()
     toolbar = ObjectProperty()
+    toolbar_title = ObjectProperty()
 
     # DATA
     valid_key = BooleanProperty()
@@ -28,16 +32,10 @@ class RootController(MDBoxLayout):
     def __init__(self, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.time_manager = None
-        
         self.nav_drawer.disabled = True
         self.toolbar.disabled = True
+        self.screen_manager = RootScreenManager()
 
-
-    def verify_creds(self):
-        if verify_service_account():
-            self.valid_key = True
-        else:
-            self.valid_key = False
 
 
     def get_lists(self):
@@ -78,11 +76,90 @@ class RootController(MDBoxLayout):
             print(e)
             return
         self.toolbar.title = screen_name.replace("_"," ").title()
+        self.toolbar_title.text = screen_name.replace("_"," ").title()
         if self.nav_drawer:
             self.nav_drawer.set_state("closed")
+
+
+
+#   --- Credentials Management ---
+
+    def verify_service_account(self, info=None):
+        """
+        Verifies Google Service Account credentials.
+        'info' can be a dictionary or a JSON string.
+        If None, it attempts to load from the default local file.
+        """
+        print("verify_service_account called")
+        
+        if info is None:
+            try:
+        try:
+            if info is None:
+                with open("data/security/creds.json", "r") as f:
+                    info = json.load(f)
+                
+                if isinstance(info, str):
+                    info = json.loads(info)
+                    
+            except Exception as e:
+                print(f"Credential Load Error: {e}")
+                self.valid_key = False
+                return False
+            
+            if isinstance(info, str):
+                info = json.loads(info)
+
+        else:
+            try:
+                # 1. Attempt to create credentials object
+                creds = service_account.Credentials.from_service_account_info(info)
+                
+                # 2. Scope the credentials (e.g., for Google Drive or Cloud Storage)
+                # Even if you don't use the API, scoping is required to verify
+                scoped_creds = creds.with_scopes(['https://www.googleapis.com/auth/cloud-platform'])
+                
+                # 3. Build a service and make a 'test' call
+                # We use the Service Usage API to see if we can at least authenticate
+                service = build('serviceusage', 'v1', credentials=scoped_creds)
+                
+                # This triggers a refresh/validation check
+                print(f"Success! Authenticated as: {creds.service_account_email}")
+                self.valid_key = True
+            # 1. Attempt to create credentials object
+            creds = service_account.Credentials.from_service_account_info(info)
+            
+            # 2. Scope the credentials
+            scoped_creds = creds.with_scopes(['https://www.googleapis.com/auth/cloud-platform'])
+            
+            # 3. Build a service and make a 'test' call
+            service = build('serviceusage', 'v1', credentials=scoped_creds)
+            
+            # This triggers a refresh/validation check
+            print(f"Success! Authenticated as: {creds.service_account_email}")
+            self.valid_key = True
+
+            except Exception as e:
+                print(f"Verification Failed: {e}")
+                self.valid_key = False
+        except Exception as e:
+            print(f"Verification Failed: {e}")
+            self.valid_key = False
+            
+        return self.valid_key
+
+
+    def on_valid_key(self, instance, value):
+        if value is True:
+            print("Credentials are valid.")
+            self.get_lists()
+        else:
+            print("Credentials are invalid.")
+
 
 #   --- App Properties ---
 
     @property
     def app(self):
         return MDApp.get_running_app()
+    

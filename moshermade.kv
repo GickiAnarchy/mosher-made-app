@@ -19,7 +19,7 @@
 	
 	MDNavigationLayout:
                 
-		MDScreenManager:
+		RootScreenManager:
 			id:screen_manager
 		
 		MDNavigationDrawer:
@@ -182,6 +182,16 @@
                 text: "Loading..."
                 valign:"top"
                 halign:"center"
+
+			MDButton:
+				on_release: root.try_again()
+				size_hint: 0.4, None
+				height: dp(40)
+				MDButtonText:
+					text: "Try Again"
+
+
+
 
 
 <InputKeyScreen>:

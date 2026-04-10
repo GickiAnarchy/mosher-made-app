@@ -1,6 +1,8 @@
+import threading
 from kivymd.app import MDApp
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.label import MDLabel
+from kivymd.uix.button import MDButton,MDButtonText
 from kivy.properties import ObjectProperty
 from kivy.clock import Clock
 from data import SpinningLogo
@@ -15,12 +17,19 @@ class LoadingScreen(MDScreen):
 
 
     def on_enter(self):
-        self.app.rc.verify_creds()
-        print(self.app.rc.valid_key)
-        if self.app.rc.valid_key:
-            self.app.rc.get_lists()
-        else:
-            self.app.rc.screen_manager.current = "needkey"
+        print("loading_screen.on_enter()")
+    
+
+    def try_verify(self):
+        def vsa():
+            self.app.rc.verify_service_account()
+        threading.Thread(target=vsa, daemon=True).start()
+
+
+    def try_again(self):
+        self.try_verify()
+
+
 
 
     @property
