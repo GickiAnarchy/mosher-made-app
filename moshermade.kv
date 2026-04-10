@@ -45,6 +45,13 @@
 						icon: "clock"
 					MDNavigationDrawerItemText:
 						text: "Clock"
+				
+				MDNavigationDrawerItem:
+				    on_release: root.goto("edittime")
+					MDNavigationDrawerItemLeadingIcon:
+						icon: "timer"
+					MDNavigationDrawerItemText:
+						text: "Edit Time"
 
 
 <HomeScreen>:
@@ -192,6 +199,33 @@
 					text: "Try Again"
 
 
+<EditTimeScreen>:
+	name:"edittime"
+
+	MDBoxLayout:
+		orientation:"vertical"
+		padding: 15
+		spacing: 10
+		
+		MDBoxLayout:
+			orientation:"vertical"
+			padding: 10
+			spacing: 10
+			pos_hint: {"center_x":0.5, "top": 0.1}
+
+			MDButton:
+				on_release: root.edit_time()
+				size_hint: 0.4, None
+				height: dp(40)
+				MDButtonText:
+					text: "Edit Time"
+
+			MDButton:
+				on_release: root.edit_date()
+				size_hint: 0.4, None
+				height: dp(40)
+				MDButtonText:
+					text: "Edit Date"
 
 
 
