@@ -16,6 +16,7 @@ class LoadingScreen(MDScreen):
 
     def on_enter(self):
         self.app.rc.verify_creds()
+        print(self.app.rc.valid_key)
         if self.app.rc.valid_key:
             self.app.rc.get_lists()
         else:

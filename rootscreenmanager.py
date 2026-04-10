@@ -9,11 +9,18 @@ class RootScreenManager(MDScreenManager):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.screen_names = []    
+        self.screen_names = []
+        self.build_root()
+
 
 
     def build_root(self):
-        pass
+        for cls, name in SCREENS:
+            self.add_widget(cls(name = name))
+            self.screen_names.append(name)
+            print(f"screen {name} added")
+
+
 
     
     def goto(self, screen_name):

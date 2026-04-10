@@ -20,7 +20,7 @@ class RootController(MDBoxLayout):
     toolbar = ObjectProperty()
 
     # DATA
-    valid_key = BooleanProperty(False)
+    valid_key = BooleanProperty()
     employees = ListProperty([])
     employers = ListProperty([])
 
@@ -34,9 +34,11 @@ class RootController(MDBoxLayout):
 
 
     def verify_creds(self):
-        def _verify():
-            self.valid_key = verify_service_account()
-        threading.Thread(target=_verify, daemon=True).start()
+        if verify_service_account():
+            self.valid_key = True
+        else:
+            self.valid_key = False
+
 
     def get_lists(self):
         def fetch_data():

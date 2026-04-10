@@ -33,17 +33,9 @@ class MosherMadeApp(MDApp):
         self.rc = RootController()
         self.theme_cls.theme_style = "Dark"
         self.theme_cls.primary_palette = "Green"
-        
-        #Clock.schedule_once(self.verify_creds, 1)
-        
-        for cls, name in SCREENS:
-            self.rc.screen_manager.add_widget(cls(name = name))
-        if os.path.exists("creds.json"):
-            self.rc.screen_manager.current = "loading"
-        else:
-            self.rc.screen_manager.current = "needkey"
         return self.rc
 
 
     def on_start(self):
         self.fps_monitor_start()
+        
