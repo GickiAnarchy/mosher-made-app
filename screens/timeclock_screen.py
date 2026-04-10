@@ -118,7 +118,7 @@ class TimeClockScreen(MDScreen):
         with open("clocked_in.json", "w") as f:
             json.dump(dict(self.clocked_in_employees), f)
 
-        print(f"Clocking in: {selected}")
+        print(f"Clocking in: {selected} at {now}")
         self.update_employees()
 
 
