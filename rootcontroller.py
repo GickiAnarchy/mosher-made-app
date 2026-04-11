@@ -11,7 +11,7 @@ from kivymd.uix.appbar import MDTopAppBar, MDTopAppBarTitle, MDActionTopAppBarBu
 from kivymd.uix.navigationdrawer import MDNavigationDrawer, MDNavigationDrawerItem, MDNavigationDrawerItemText, MDNavigationDrawerItemLeadingIcon
 from kivy.properties import ObjectProperty, ListProperty, BooleanProperty
 from kivy.clock import Clock
-Clock.max_iteration = 20
+Clock.max_iteration = 30
 from data import TimesheetManager
 from rootscreenmanager import RootScreenManager
 
@@ -38,7 +38,6 @@ class RootController(MDBoxLayout):
 
 
     def get_lists(self):
-        Clock.schedule_once(lambda dt: self.screen_manager.get_screen("loading").set_progress(45))
         def fetch_data():
             # Blocking network calls happen in this background thread
             tm = TimesheetManager()
@@ -50,14 +49,12 @@ class RootController(MDBoxLayout):
 
 
     def _finalize_data(self, tm, employees, employers):
-        Clock.schedule_once(lambda dt: self.screen_manager.get_screen("loading").set_progress(70))
         self.time_manager = tm
         self.employees = employees
         self.employers = employers
         print(f"Employers: {self.employers}")
         self.nav_drawer.disabled = False
         self.toolbar.disabled = False
-        Clock.schedule_once(lambda dt: self.screen_manager.get_screen("loading").set_progress(95))
         self.screen_manager.current = "home"
 
 

@@ -22,33 +22,44 @@ class LoadingScreen(MDScreen):
 
 
     def on_enter(self):
-        self.progress = 10 # Start the bar
+        self.slide_progress(10) # Start the bar
         self.try_verify()
 
 
     def try_verify(self):
         def vsa():
             # Update progress as steps complete
-            Clock.schedule_once(lambda dt: self.set_progress(30))
+            Clock.schedule_once(lambda dt: self.slide_progress(30))
             
             with open("creds.json", "r") as f:
                 info = json.load(f)
             
             # Example: Increment after verification
             if self.app.rc.verify_service_account(info, is_test=False):
-                Clock.schedule_once(lambda dt: self.set_progress(100))
+                Clock.schedule_once(lambda dt: self.slide_progress(100))
             else:
-                Clock.schedule_once(lambda dt: self.set_progress(0))
+                Clock.schedule_once(lambda dt: self.slide_progress(0))
 
         threading.Thread(target=vsa, daemon=True).start()
 
 
     def set_progress(self, value):
         self.progress = value
+
+
+    def on_progress(self, instance, value):
+        print(f"Progress updated to {value}%")
         
         
     def try_again(self):
         self.try_verify()
+
+
+    def slide_progress(self, amount):
+        if self.progress > amount:
+            self.progress = 0
+        while self.progress < amount:
+            self.progress += 1
 
 
     @property

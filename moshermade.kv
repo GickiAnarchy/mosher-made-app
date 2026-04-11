@@ -180,6 +180,7 @@
             orientation:"vertical"
             size_hint: 1, 1
             pos_hint:{"center_x":0.5,"center_y":0.5}
+            spacing:dp(1)
             
             SpinningLogo:
                 id:logo
@@ -189,24 +190,18 @@
             MDLinearProgressIndicator:
                 id: progress_bar
                 value: root.progress
-                type: "determinate"  # Or "indeterminate" for a constant loop
+                type: "determinate"
                 running_duration: 1
                 catching_duration: 1.5
-                size_hint_y: 0.4
-                size_hint_x:None 
-                height: dp(10)
+                size_hint_x: 0.6
+                size_hint_y:None 
+                height: dp(20)
+                pos_hint:{"center_x":0.5}
            
             MDLabel:
                 text: "Loading..."
                 valign:"top"
                 halign:"center"
-
-			MDButton:
-				on_release: root.try_again()
-				size_hint: 0.4, None
-				height: dp(40)
-				MDButtonText:
-					text: "Try Again"
 
 
 <EditTimeScreen>:
@@ -301,7 +296,7 @@
 		size_hint_x: 0.3
 		on_release: root.on_release(root.btn)
 
-
+ 
 <SpinningLogo>:
     canvas.before:
         PushMatrix
