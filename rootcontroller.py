@@ -36,13 +36,9 @@ class RootController(MDBoxLayout):
         self.toolbar.disabled = True
         self.valid_key = False
 
-        
-    def on_enter(self):
-        pass
-        #self.screen_manager.build_root()
-
 
     def get_lists(self):
+        Clock.schedule_once(lambda dt: self.screen_manager.get_screen("loading").set_progress(45))
         def fetch_data():
             # Blocking network calls happen in this background thread
             tm = TimesheetManager()
@@ -54,12 +50,14 @@ class RootController(MDBoxLayout):
 
 
     def _finalize_data(self, tm, employees, employers):
+        Clock.schedule_once(lambda dt: self.screen_manager.get_screen("loading").set_progress(70))
         self.time_manager = tm
         self.employees = employees
         self.employers = employers
         print(f"Employers: {self.employers}")
         self.nav_drawer.disabled = False
         self.toolbar.disabled = False
+        Clock.schedule_once(lambda dt: self.screen_manager.get_screen("loading").set_progress(95))
         self.screen_manager.current = "home"
 
 
@@ -82,7 +80,6 @@ class RootController(MDBoxLayout):
             self.nav_drawer.set_state("closed")
 
 
-
 #   --- Credentials Management ---
 
     def verify_service_account(self, info, is_test = True):
@@ -101,7 +98,6 @@ class RootController(MDBoxLayout):
             # 3. Build a service and make a 'test' call
             # We use the Service Usage API to see if we can at least authenticate
             service = build('serviceusage', 'v1', credentials=scoped_creds)
-            
             # This triggers a refresh/validation check
             print(f"Success! Authenticated as: {creds.service_account_email}")
             if is_test is False:

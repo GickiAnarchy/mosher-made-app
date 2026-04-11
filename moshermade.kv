@@ -186,6 +186,16 @@
                 source:"assets/icon.png"
                 pos_hint: {"center_x": 0.5}
             
+            MDLinearProgressIndicator:
+                id: progress_bar
+                value: root.progress
+                type: "determinate"  # Or "indeterminate" for a constant loop
+                running_duration: 1
+                catching_duration: 1.5
+                size_hint_y: 0.4
+                size_hint_x:None 
+                height: dp(10)
+           
             MDLabel:
                 text: "Loading..."
                 valign:"top"

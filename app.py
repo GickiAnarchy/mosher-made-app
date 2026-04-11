@@ -20,9 +20,8 @@ class MosherMadeApp(MDApp):
     def __init__(self, **kwargs):
         print("init - before super")
         super().__init__(**kwargs)
-        self.theme_cls.theme_style = "Dark"
-        self.theme_cls.primary_palette = "Green"
-        
+        #self.theme_cls.theme_style = "Light"
+        #self.theme_cls.primary_palette = "Green"
         self.key_is_valid = False
         print("init - after super")
 
@@ -31,13 +30,3 @@ class MosherMadeApp(MDApp):
         print("build called")
         self.rc = RootController()
         return self.rc
-
-
-    def on_start(self):
-        pass
-        #self.fps_monitor_start()
-
-  
-if __name__ == "__main__":
-    lst = [attr for attr in dir(Clock)]
-    print(lst)  

@@ -4,32 +4,49 @@ from kivymd.app import MDApp
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.label import MDLabel
 from kivymd.uix.button import MDButton,MDButtonText
-from kivy.properties import ObjectProperty
+from kivymd.uix.progressindicator import MDLinearProgressIndicator
+from kivy.properties import ObjectProperty, NumericProperty
 from kivy.clock import Clock
 from data import SpinningLogo
 
 
+
+00
 class LoadingScreen(MDScreen):
     logo = ObjectProperty()
+    progress = NumericProperty(0) # Initialize at 0
 
 
     def on_pre_enter(self):
-        Clock.schedule_once(self.logo.spin,0)
+        Clock.schedule_once(self.logo.spin)
 
 
     def on_enter(self):
-        print("loading_screen.on_enter()")
+        self.progress = 10 # Start the bar
         self.try_verify()
-    
+
 
     def try_verify(self):
         def vsa():
-            with open("creds.json","r") as f:
+            # Update progress as steps complete
+            Clock.schedule_once(lambda dt: self.set_progress(30))
+            
+            with open("creds.json", "r") as f:
                 info = json.load(f)
-            self.app.rc.verify_service_account(info, is_test = False)
+            
+            # Example: Increment after verification
+            if self.app.rc.verify_service_account(info, is_test=False):
+                Clock.schedule_once(lambda dt: self.set_progress(100))
+            else:
+                Clock.schedule_once(lambda dt: self.set_progress(0))
+
         threading.Thread(target=vsa, daemon=True).start()
 
 
+    def set_progress(self, value):
+        self.progress = value
+        
+        
     def try_again(self):
         self.try_verify()
 
