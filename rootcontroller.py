@@ -28,6 +28,8 @@ class RootController(MDBoxLayout):
     employees = ListProperty([])
     employers = ListProperty([])
 
+    clocked_in_list = ListProperty()
+
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args,**kwargs)
@@ -77,6 +79,20 @@ class RootController(MDBoxLayout):
             self.nav_drawer.set_state("closed")
 
 
+#   --- Time Management ---
+    
+    def get_clocked_in(self):
+        try:
+            with open("clocked_in.json") as f:
+                clocked_in = json.load(f)
+        except Exception as e:
+            print(e)
+            print("get_clocked_in() Exception thrown")
+            return []
+
+        return [{name:time} for name,time in clocked_in.items()]
+
+
 #   --- Credentials Management ---
 
     def verify_service_account(self, info, is_test = True):
@@ -114,6 +130,10 @@ class RootController(MDBoxLayout):
 
 
 #   --- App Properties ---
+
+    def close_me(self, btn = None):
+        Clock.schedule_once(lambda x: self.app.stop())
+
 
     @property
     def app(self):

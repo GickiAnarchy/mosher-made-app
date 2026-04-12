@@ -25,7 +25,13 @@ class RootScreenManager(MDScreenManager):
             print(f"{screen_name} not a screen name")
             return
         print(f"going to {screen_name}")
-        self.current = screen_name
+        self.current = screen_name        
+    
+
+    @property
+    def rc(self):
+        return self.app.rc
+
 
     @property
     def app(self):

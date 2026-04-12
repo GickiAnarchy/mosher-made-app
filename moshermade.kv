@@ -27,46 +27,55 @@
 			id: nav_drawer
 			type:"selected"
 
-			MDNavigationDrawerMenu:
+			MDBoxLayout: # Use a BoxLayout to control vertical positioning
+				orientation: "vertical"
 
-				MDNavigationDrawerLabel:
-					text: "Navigation"
-				
-				MDNavigationDrawerItem:
-					on_release: root.goto("home")
-					MDNavigationDrawerItemLeadingIcon:
-						icon: "home"
-					MDNavigationDrawerItemText:
-						text: "Home"
+				MDNavigationDrawerMenu: # This will contain all regular menu items
+					adaptive_height: True # Important so it doesn't take all vertical space
 
-				MDNavigationDrawerItem:
-				    on_release: root.goto("clock")
+					MDNavigationDrawerLabel:
+						text: "Navigation"
+					
+					MDNavigationDrawerItem:
+						on_release: root.goto("home")
+						MDNavigationDrawerItemLeadingIcon:
+							icon: "home"
+						MDNavigationDrawerItemText:
+							text: "Home"
+
+					MDNavigationDrawerItem:
+						on_release: root.goto("clock")
+						MDNavigationDrawerItemLeadingIcon:
+							icon: "clock"
+						MDNavigationDrawerItemText:
+							text: "Clock"
+					
+					MDNavigationDrawerItem:
+						on_release: root.goto("edittime")
+						MDNavigationDrawerItemLeadingIcon:
+							icon: "timer"
+						MDNavigationDrawerItemText:
+							text: "Add/Edit Time"
+
+				Widget: # This spacer will push the next item to the very bottom
+
+				MDNavigationDrawerItem: # This is the app.stop() item, now at the bottom
+					size_hint_y: None
+					height: dp(40) # Fixed height
+					on_release: root.close_me()
 					MDNavigationDrawerItemLeadingIcon:
-						icon: "clock"
-					MDNavigationDrawerItemText:
-						text: "Clock"
-				
-				MDNavigationDrawerItem:
-				    on_release: root.goto("edittime")
-					MDNavigationDrawerItemLeadingIcon:
-						icon: "timer"
-					MDNavigationDrawerItemText:
-						text: "Edit Time"
+						icon: "close"
 
 
 <HomeScreen>:
+	clocked_in_box:clocked_in_box
+	
     name:"home"
     
     MDBoxLayout:
         orientation:"vertical"
         padding: 15
-        
-        FitImage:
-            source:"assets/mm_title.png"
-            size_hint: (None, None)
-			width: self.texture_size[0]
-            pos_hint: {"center_x":0.5}
-            height: dp(100)
+		md_bg_color: 0,1,1,1
             
         Widget:
 
@@ -74,7 +83,7 @@
 			orientation:"vertical"
 			ScrollView:
 				MDBoxLayout:
-					id:on_clock_box
+					id:clocked_in_box
 					orientation:"vertical"
 					size_hint_y:None
 					height: self.minimum_height
@@ -186,17 +195,6 @@
                 id:logo
                 source:"assets/icon.png"
                 pos_hint: {"center_x": 0.5}
-            
-            MDLinearProgressIndicator:
-                id: progress_bar
-                value: root.progress
-                type: "determinate"
-                running_duration: 1
-                catching_duration: 1.5
-                size_hint_x: 0.6
-                size_hint_y:None 
-                height: dp(20)
-                pos_hint:{"center_x":0.5}
            
             MDLabel:
                 text: "Loading..."
@@ -210,28 +208,75 @@
 	MDBoxLayout:
 		orientation:"vertical"
 		padding: 15
-		spacing: 10
+		spacing: dp(15)
 		
 		MDBoxLayout:
 			orientation:"vertical"
-			padding: 10
-			spacing: 10
-			pos_hint: {"center_x":0.5, "top": 0.1}
+			padding: dp(10)
+			spacing: dp(15)
+			adaptive_height: True
 
+			# Employee Selection
 			MDButton:
-				on_release: root.edit_time()
-				size_hint: 0.4, None
-				height: dp(40)
+				style: "tonal"
+				on_release: root.open_employee_menu(self)
+				size_hint_x: 1
 				MDButtonText:
-					text: "Edit Time"
+					text: root.selected_employee
 
+			# Employer Selection
 			MDButton:
+				style: "tonal"
+				on_release: root.open_employer_menu(self)
+				size_hint_x: 1
+				MDButtonText:
+					text: root.selected_employer
+
+			# Date Selection
+			MDButton:
+				style: "tonal"
 				on_release: root.edit_date()
-				size_hint: 0.4, None
-				height: dp(40)
+				size_hint_x: 1
 				MDButtonText:
-					text: "Edit Date"
+					text: f"Date: {root.selected_date}"
 
+			# Time Selection Row
+			MDBoxLayout:
+				orientation: "horizontal"
+				spacing: dp(10)
+				size_hint_y: None
+				height: self.minimum_height
+
+				MDButton:
+					style: "tonal"
+					on_release: root.edit_time("in")
+					size_hint_x: 0.5
+					MDButtonText:
+						text: f"In: {root.time_in}"
+
+				MDButton:
+					style: "tonal"
+					on_release: root.edit_time("out")
+					size_hint_x: 0.5
+					MDButtonText:
+						text: f"Out: {root.time_out}"
+
+			# Notes Field
+			MDTextField:
+				id: note_field
+				mode: "outlined"
+				MDTextFieldHintText:
+					text: "Notes / Details"
+
+		Widget: # Spacer
+
+		MDButton:
+			style: "filled"
+			on_release: root.save_shift()
+			pos_hint: {"center_x": .5}
+			size_hint_x: .8
+			MDButtonText:
+				text: "Save Shift Log"
 
 
 <InputKeyScreen>:
