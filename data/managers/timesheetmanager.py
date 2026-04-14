@@ -194,3 +194,38 @@ class TimesheetManager:
 
     def get_employers_data(self):
         return self.employer_manager.get_all_employers_data()
+
+        
+    def add_new_employee(self, name, wage):
+        """
+        Appends a new employee and their wage to the DATA sheet.
+        Columns A (Name) and B (Wage).
+        """
+        # We use a list of lists because gspread append_rows expects a 2D array
+        # even for a single row.
+        new_row = [[name, wage]]
+        try:
+            # We append to the 'Employees' named range or specific columns
+            # 'DATA!A:B' ensures it stays in the employee section
+            self.sm.data_ws.append_rows(new_row, table_range="A:B")
+            print(f"Added Employee: {name}")
+            return True
+        except Exception as e:
+            print(f"Error adding employee: {e}")
+            return False
+
+
+    def add_new_employer(self, name, location=""):
+        """
+        Appends a new employer and their location to the DATA sheet.
+        Columns D (Name) and E (Location).
+        """
+        new_row = [[name, location]]
+        try:
+            # 'DATA!D:E' ensures it stays in the employer section
+            self.sm.data_ws.append_rows(new_row, table_range="D:E")
+            print(f"Added Employer: {name}")
+            return True
+        except Exception as e:
+            print(f"Error adding employer: {e}")
+            return False

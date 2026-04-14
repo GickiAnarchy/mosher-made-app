@@ -20,8 +20,9 @@ class MosherMadeApp(MDApp):
     def __init__(self, **kwargs):
         print("init - before super")
         super().__init__(**kwargs)
-        #self.theme_cls.theme_style = "Light"
+        self.theme_cls.theme_style = "Light"
         #self.theme_cls.primary_palette = "Green"
+        self.theme_cls.backgroundColor = (0,0,0,1)
         self.key_is_valid = False
         print("init - after super")
 
