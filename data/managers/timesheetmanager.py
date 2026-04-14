@@ -216,16 +216,20 @@ class TimesheetManager:
 
 
     def add_new_employer(self, name, location=""):
-        """
-        Appends a new employer and their location to the DATA sheet.
-        Columns D (Name) and E (Location).
-        """
-        new_row = [[name, location]]
-        try:
-            # 'DATA!D:E' ensures it stays in the employer section
-            self.sm.data_ws.append_rows(new_row, table_range="D:E")
-            print(f"Added Employer: {name}")
-            return True
-        except Exception as e:
-            print(f"Error adding employer: {e}")
-            return False
+        return self.employer_manager.add(name, location)
+
+    def update_employee(self, old_name, new_name=None, new_wage=None):
+        """Updates employee details in the DATA sheet."""
+        return self.employee_manager.update(old_name, new_name, new_wage)
+
+    def delete_employee(self, name):
+        """Deletes an employee from the DATA sheet."""
+        return self.employee_manager.delete(name)
+
+    def update_employer(self, old_name, new_name=None, new_location=None):
+        """Updates employer details in the DATA sheet."""
+        return self.employer_manager.update(old_name, new_name, new_location)
+
+    def delete_employer(self, name):
+        """Deletes an employer from the DATA sheet."""
+        return self.employer_manager.delete(name)

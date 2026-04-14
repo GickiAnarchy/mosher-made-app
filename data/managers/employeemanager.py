@@ -28,9 +28,13 @@ class EmployeeManager:
         if next_row < 3:
             next_row = 3
             
-        self.sm.update_range("DATA", f"A{next_row}:B{next_row}", [[name, wage]])
-        print(f"Added Employee {name} with wage {wage}")
-
+        try:
+            self.sm.update_range("DATA", f"A{next_row}:B{next_row}", [[name, wage]])
+            print(f"Added Employee {name} with wage {wage}")
+            return True
+        except Exception as e:
+            print(f"Error adding employee: {e}")
+            return False
 
     def update(self, name, new_name=None, new_wage=None):
         row = self._get_row_index(name)

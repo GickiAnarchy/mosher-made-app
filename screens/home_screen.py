@@ -23,6 +23,7 @@ class HomeScreen(MDScreen):
         if hasattr(self.app, 'rc') and self.app.rc:
             clocked_in = self.app.rc.get_clocked_in()
 
+
     @property
     def app(self):
         return MDApp.get_running_app()

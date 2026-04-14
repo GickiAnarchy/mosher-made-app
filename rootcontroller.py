@@ -132,7 +132,7 @@ class RootController(MDBoxLayout):
 #   --- App Properties ---
 
     def close_me(self, btn = None):
-        Clock.schedule_once(lambda x: self.app.stop())
+        Clock.schedule_once(self.app.stop)
 
 
     @property

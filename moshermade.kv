@@ -1,3 +1,7 @@
+###
+###	CONTROLLER
+###
+
 <RootController>:
 	screen_manager:screen_manager
     toolbar:toolbar
@@ -44,13 +48,6 @@
 							text: "Home"
 
 					MDNavigationDrawerItem:
-						on_release: root.goto("clock")
-						MDNavigationDrawerItemLeadingIcon:
-							icon: "clock"
-						MDNavigationDrawerItemText:
-							text: "Clock"
-					
-					MDNavigationDrawerItem:
 						on_release: root.goto("add")
 						MDNavigationDrawerItemLeadingIcon:
 							icon: "add"
@@ -67,6 +64,12 @@
 						icon: "close"
 
 
+
+###
+###	SCREENS
+###
+
+
 <HomeScreen>:
 	clocked_in_box:clocked_in_box
 	
@@ -75,7 +78,7 @@
     MDBoxLayout:
         orientation:"vertical"
         padding: 15
-		md_bg_color: 0,1,1,1
+		md_bg_color: 1,1,1,1
             
         Widget:
 
@@ -87,92 +90,7 @@
 					orientation:"vertical"
 					size_hint_y:None
 					height: self.minimum_height
-					spacing: dp(20)					
-
-
-<TimeClockScreen>:
-    employers_cbs: employers_cbs
-    check_items_container: check_items_container
-    name: "clock"
-    
-    MDBoxLayout:
-        orientation: "vertical"
-        padding: dp(12)
-        spacing: dp(10)
-
-        # Section 1: Employees
-        MDBoxLayout:
-            orientation: "vertical"
-            size_hint_y: 0.45 # Give it a specific portion of the screen
-            canvas.before:
-                Color:
-                    rgba: 0.1, 1, 0.3, 0.2 # Toned down the alpha for performance
-                Line:
-                    width: dp(2)
-                    rounded_rectangle: (self.x, self.y, self.width, self.height, dp(15))
-
-            MDLabel:
-                text: "Clock In/Out"
-                size_hint_y: None
-                height: dp(40)
-                halign: "center"
-            
-            ScrollView:
-                do_scroll_x: False
-                MDGridLayout:
-                    id: check_items_container
-                    cols: 2 # Reduced to 2 columns for better fit/less overlap
-                    adaptive_height: True
-                    spacing: dp(5)
-                    padding: dp(5)
-        
-        # Section 2: Employers
-        MDBoxLayout:
-            orientation: "vertical"
-            size_hint_y: 0.45
-            canvas.before:
-                Color:
-                    rgba: 0.1, 1, 0.3, 0.2
-                Line:
-                    width: dp(2)
-                    rounded_rectangle: (self.x, self.y, self.width, self.height, dp(15))
-
-            MDLabel:
-                text: "Which Employer?"
-                size_hint_y: None
-                height: dp(40)
-                halign: "center"
-            
-            ScrollView:
-                do_scroll_x: False
-                MDGridLayout:
-                    id: employers_cbs
-                    cols: 2
-                    adaptive_height: True
-                    spacing: dp(5)
-                    padding: dp(5)
-
-        # Section 3: Buttons
-        MDBoxLayout:
-            orientation: "horizontal"
-            size_hint_y: None
-            height: dp(60)
-            spacing: dp(15)
-            padding: dp(5)
-
-            MDButton:
-                style: "filled"
-                size_hint_x: 0.5
-                on_release: root.handle_clock_in()
-                MDButtonText:
-                    text: "Clock In"
-            
-            MDButton:
-                style: "filled"
-                size_hint_x: 0.5
-                on_release: root.handle_clock_out()
-                MDButtonText:
-                    text: "Clock Out"
+					spacing: dp(20)
 
 
 <LoadingScreen>:
@@ -197,111 +115,6 @@
                 text: "Loading..."
                 valign:"top"
                 halign:"center"
-
-
-<EditTimeScreen>:
-	name:"edittime"
-
-	MDBoxLayout:
-		orientation:"vertical"
-		padding: 15
-		spacing: dp(15)
-		
-		MDBoxLayout:
-			orientation:"vertical"
-			padding: dp(10)
-			spacing: dp(15)
-			adaptive_height: True
-
-			# Employee Selection
-			MDButton:
-				style: "tonal"
-				on_release: root.open_employee_menu(self)
-				size_hint_x: 1
-				MDButtonText:
-					text: root.selected_employee
-
-			# Employer Selection
-			MDButton:
-				style: "tonal"
-				on_release: root.open_employer_menu(self)
-				size_hint_x: 1
-				MDButtonText:
-					text: root.selected_employer
-
-			# Date Selection
-			MDButton:
-				style: "tonal"
-				on_release: root.edit_date()
-				size_hint_x: 1
-				MDButtonText:
-					text: f"Date: {root.selected_date}"
-
-			# Time Selection Row
-			MDBoxLayout:
-				orientation: "horizontal"
-				spacing: dp(10)
-				size_hint_y: None
-				height: self.minimum_height
-
-				MDButton:
-					style: "tonal"
-					on_release: root.edit_time("in")
-					size_hint_x: 0.5
-					MDButtonText:
-						text: f"In: {root.time_in}"
-
-				MDButton:
-					style: "tonal"
-					on_release: root.edit_time("out")
-					size_hint_x: 0.5
-					MDButtonText:
-						text: f"Out: {root.time_out}"
-
-			# Notes Field
-			MDTextField:
-				id: note_field
-				mode: "outlined"
-				MDTextFieldHintText:
-					text: "Notes / Details"
-
-		Widget: # Spacer
-
-		MDButton:
-			style: "filled"
-			on_release: root.save_shift()
-			pos_hint: {"center_x": .5}
-			size_hint_x: .8
-			MDButtonText:
-				text: "Save Shift Log"
-
-
-<InputKeyScreen>:
-    creds_field:creds_field
-    
-    name:"needkey"
-    
-    MDBoxLayout:
-        orientation:"vertical"
-        
-        MDLabel:
-            text:"Enter the Google Service Account Credentials"
-            halign:"center"
-    
-        MDTextField:
-            id: creds_field
-            multiline: True
-            size_hint: 0.8, 0.8
-            pos_hint:{"center_x":0.5}
-            
-        MDButton:
-            on_release:root.check_creds()
-            size_hint: 0.4, None
-            height: dp(40)
-            pos_hint:{"center_x":0.5}
-            
-            MDButtonText:
-                text: "Check Credentials"
 
 
 <AddScreen>:
@@ -405,10 +218,8 @@
         text: root.name_text
         halign: "left"
         valign: "center"
-        # Ensure text stays on one line to prevent height recalculations
         shorten: True
         shorten_from: "right"
-
 
 
 <ButtonLabel>:
