@@ -124,34 +124,20 @@ class TimeClockScreen(MDScreen):
 
 
     def handle_clock_out(self):
-        """Example trigger method to be called from a button in your KV file."""
-        if self.get_selected_employer() == "No Employer":
-            print("Error: No employer selected.")
-            return
-        selected = self.get_selected_employees()
-        clock_out_time = self.app.rc.time_manager.get_current_time()
-        if not selected:
-            print("No employees selected for Clock Out.")
-            return
-        for employee in selected:
-            if employee in self.clocked_in_employees:
-                clock_in_time = self.clocked_in_employees[employee]
-                self.app.rc.time_manager.log_shift(
-                    date=None, 
-                    employee_name=employee, 
-                    employer_name=self.get_selected_employer(), 
-                    time_in=clock_in_time, 
-                    time_out=clock_out_time
-                )
-                del self.clocked_in_employees[employee]
-    
-        # Update the file after removing employees
+        # ... your existing logic ...
+        
+        # Update the file
         with open("clocked_in.json", "w") as f:
             json.dump(dict(self.clocked_in_employees), f)    
+        
+        # Instead of calling these directly, schedule them so the UI can settle
+        Clock.schedule_once(self.refresh_ui, 0.1)
+    
+    def refresh_ui(self, dt):
         self.employers_cbs.clear_widgets()
-        print(f"Clocking out: {selected}")
         self.update_employees()
         self.update_employers()
+
 
 
 #   --- App Properties ---

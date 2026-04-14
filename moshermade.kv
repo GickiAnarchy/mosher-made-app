@@ -51,11 +51,11 @@
 							text: "Clock"
 					
 					MDNavigationDrawerItem:
-						on_release: root.goto("edittime")
+						on_release: root.goto("add")
 						MDNavigationDrawerItemLeadingIcon:
-							icon: "timer"
+							icon: "add"
 						MDNavigationDrawerItemText:
-							text: "Add/Edit Time"
+							text: "Add Employer/Client"
 
 				Widget: # This spacer will push the next item to the very bottom
 
@@ -91,91 +91,88 @@
 
 
 <TimeClockScreen>:
-	employers_cbs:employers_cbs
-	check_items_container: check_items_container
-	name:"clock"
-	
-	MDBoxLayout:
-		orientation:"vertical"
-		padding: 15
+    employers_cbs: employers_cbs
+    check_items_container: check_items_container
+    name: "clock"
+    
+    MDBoxLayout:
+        orientation: "vertical"
+        padding: dp(12)
+        spacing: dp(10)
 
-		MDBoxLayout:
-			orientation:"vertical"
-			padding: 10
-			spacing: 10
-			#pos_hint: {"center_x":0.5, "top": 0.1}
-			
-			canvas.before:
-			    Color:
-			        rgba: 0.1, 1, 0.3, 0.6
-			    Line:
-                    width: 5
-                    rounded_rectangle: (self.x, self.y, self.width, self.height, 25)
+        # Section 1: Employees
+        MDBoxLayout:
+            orientation: "vertical"
+            size_hint_y: 0.45 # Give it a specific portion of the screen
+            canvas.before:
+                Color:
+                    rgba: 0.1, 1, 0.3, 0.2 # Toned down the alpha for performance
+                Line:
+                    width: dp(2)
+                    rounded_rectangle: (self.x, self.y, self.width, self.height, dp(15))
 
-			MDLabel:
-				text:"Clock In/Out"
-				size_hint: (0.9, None)
-				halign: "center"
-				#pos_hint: {"center_x":0.5}
-				height: dp(50)
-			
-			ScrollView:
-				size_hint_y: 0.4
-				MDGridLayout:
-					id: check_items_container
-					cols: 3
-					adaptive_height: True
-					padding: dp(10)
-					spacing: dp(10)
-		
-		MDBoxLayout:
-			orientation:"vertical"
-			padding: 10
-			spacing: 10
-			#pos_hint: {"center_x":0.5, "top": 0.1}
-			
-			canvas.before:
-			    Color:
-			        rgba: 0.1, 1, 0.3, 0.6
-			    Line:
-                    width: 5
-                    rounded_rectangle: (self.x, self.y, self.width, self.height, 25)
+            MDLabel:
+                text: "Clock In/Out"
+                size_hint_y: None
+                height: dp(40)
+                halign: "center"
+            
+            ScrollView:
+                do_scroll_x: False
+                MDGridLayout:
+                    id: check_items_container
+                    cols: 2 # Reduced to 2 columns for better fit/less overlap
+                    adaptive_height: True
+                    spacing: dp(5)
+                    padding: dp(5)
+        
+        # Section 2: Employers
+        MDBoxLayout:
+            orientation: "vertical"
+            size_hint_y: 0.45
+            canvas.before:
+                Color:
+                    rgba: 0.1, 1, 0.3, 0.2
+                Line:
+                    width: dp(2)
+                    rounded_rectangle: (self.x, self.y, self.width, self.height, dp(15))
 
-			MDLabel:
-				text:"Which Employer?"
-				size_hint: (0.9, None)
-				halign: "center"
-				#pos_hint: {"center_x":0.5}
-				height: dp(50)
-			
-			ScrollView:
-				size_hint_y: 0.4
-				MDGridLayout:
-					id: employers_cbs
-					cols: 3
-					adaptive_height: True
-					padding: dp(10)
-					spacing: dp(10)
+            MDLabel:
+                text: "Which Employer?"
+                size_hint_y: None
+                height: dp(40)
+                halign: "center"
+            
+            ScrollView:
+                do_scroll_x: False
+                MDGridLayout:
+                    id: employers_cbs
+                    cols: 2
+                    adaptive_height: True
+                    spacing: dp(5)
+                    padding: dp(5)
 
-		MDBoxLayout:
-			orientation:"horizontal"
-			padding: 10
-			spacing: 10
-			pos_hint: {"center_x":0.5, "top": 0.8}
+        # Section 3: Buttons
+        MDBoxLayout:
+            orientation: "horizontal"
+            size_hint_y: None
+            height: dp(60)
+            spacing: dp(15)
+            padding: dp(5)
 
-			MDButton:
-				pos_hint: {"center_x":0.5}
-				size_hint_x: 0.5
-				on_release: root.handle_clock_in()
-				MDButtonText:
-					text: "Clock In"
-			
-			MDButton:
-				pos_hint: {"center_x":0.5}
-				size_hint_x: 0.5
-				on_release: root.handle_clock_out()
-				MDButtonText:
-					text: "Clock Out"
+            MDButton:
+                style: "filled"
+                size_hint_x: 0.5
+                on_release: root.handle_clock_in()
+                MDButtonText:
+                    text: "Clock In"
+            
+            MDButton:
+                style: "filled"
+                size_hint_x: 0.5
+                on_release: root.handle_clock_out()
+                MDButtonText:
+                    text: "Clock Out"
 
 
 <LoadingScreen>:
@@ -307,6 +304,82 @@
                 text: "Check Credentials"
 
 
+<AddScreen>:
+    name: "add"
+    
+    MDBoxLayout:
+        orientation: "vertical"
+        padding: "16dp"
+        spacing: "20dp"
+
+        MDLabel:
+            text: "Management Center"
+            style: "HeadlineMedium"
+            halign: "center"
+            size_hint_y: None
+            height: self.texture_size[1]
+
+        # --- ADD EMPLOYEE SECTION ---
+        MDCard:
+            orientation: "vertical"
+            padding: "12dp"
+            spacing: "10dp"
+            style: "elevated"
+            adaptive_height: True
+
+            MDLabel:
+                text: "Add New Employee"
+                style: "TitleMedium"
+
+            MDTextField:
+                id: emp_name_field
+                mode: "outlined"
+                hint_text: "Employee Name"
+                
+            MDTextField:
+                id: emp_wage_field
+                mode: "outlined"
+                hint_text: "Hourly Wage (e.g. 20.00)"
+                input_filter: "float"
+
+            MDButton:
+                style: "filled"
+                pos_hint: {"center_x": .5}
+                on_release: root.save_employee()
+                MDButtonText:
+                    text: "Register Employee"
+
+        # --- ADD EMPLOYER SECTION ---
+        MDCard:
+            orientation: "vertical"
+            padding: "12dp"
+            spacing: "10dp"
+            style: "elevated"
+            adaptive_height: True
+
+            MDLabel:
+                text: "Add New Employer / Job Site"
+                style: "TitleMedium"
+
+            MDTextField:
+                id: employer_name_field
+                mode: "outlined"
+                hint_text: "Employer/Company Name"
+                
+            MDTextField:
+                id: employer_loc_field
+                mode: "outlined"
+                hint_text: "Location / Address (Optional)"
+
+            MDButton:
+                style: "filled"
+                pos_hint: {"center_x": .5}
+                on_release: root.save_employer()
+                MDButtonText:
+                    text: "Register Employer"
+
+
+
 
 ###
 ###	COMPONENTS
@@ -314,18 +387,28 @@
 
 
 <CheckItem>:
-	checkbox: checkbox
-	adaptive_height: True
-	
-	MDCheckbox:
-		id: checkbox
-		group: root.group
-	
-	MDLabel:
-		text: root.name_text
-		adaptive_height: True
-		padding_x: "12dp"
-		pos_hint: {"center_y": 0.5}
+    checkbox: checkbox
+    orientation: "horizontal"
+    size_hint_y: None
+    height: dp(48)  # Fixed height is much faster than adaptive_height
+    padding: dp(4)
+    spacing: dp(8)
+
+    MDCheckbox:
+        id: checkbox
+        group: root.group
+        size_hint: None, None
+        size: dp(40), dp(40)
+        pos_hint: {"center_y": .5}
+    
+    MDLabel:
+        text: root.name_text
+        halign: "left"
+        valign: "center"
+        # Ensure text stays on one line to prevent height recalculations
+        shorten: True
+        shorten_from: "right"
+
 
 
 <ButtonLabel>:

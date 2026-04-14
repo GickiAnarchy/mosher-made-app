@@ -5,7 +5,7 @@ from kivymd.uix.label import MDLabel
 from kivymd.uix.selectioncontrol import MDCheckbox
 from kivymd.uix.widget import MDWidget
 from kivy.properties import ObjectProperty,StringProperty
-
+from kivy.clock import Clock
 
 
 class CheckItem(MDBoxLayout):
@@ -16,7 +16,13 @@ class CheckItem(MDBoxLayout):
     def __init__(self, text = "", group = None, **kwargs):
         super().__init__(**kwargs)
         self.name_text = text
-        self.checkbox.group = group
+        if group:
+            Clock.schedule_once(lambda dt: self._set_group(group))
+
+
+    def _set_group(self, group):
+        if self.checkbox:
+            self.checkbox.group = group
 
 
     @property
