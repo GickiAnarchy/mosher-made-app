@@ -2,14 +2,14 @@ from .home_screen import HomeScreen
 from .timeclock_screen import TimeClockScreen
 from .loading_screen import LoadingScreen
 from .add_screen import AddScreen
-
+from .punch_screen import PunchScreen
 
 
 
 
 SCREENS = [
     (HomeScreen, "home"),
-    (TimeClockScreen, "clock"),
+    (PunchScreen, "punch"),
     (LoadingScreen, "loading"),
     (AddScreen, "add"),
     ]
@@ -18,7 +18,7 @@ SCREENS = [
 __all__ = [
     "SCREENS",
     "HomeScreen",
-    "TimeClockScreen",
+    "PunchScreen",
     "LoadingScreen",
     "AddScreen",
     ]

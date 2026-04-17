@@ -53,6 +53,13 @@
 							icon: "add"
 						MDNavigationDrawerItemText:
 							text: "Add Employer/Client"
+                    
+                    MDNavigationDrawerItem:
+						on_release: root.goto("punch")
+						MDNavigationDrawerItemLeadingIcon:
+							icon: "boxing-glove"
+						MDNavigationDrawerItemText:
+							text: "Punch"
 
 				Widget: # This spacer will push the next item to the very bottom
 
@@ -190,6 +197,43 @@
                 on_release: root.save_employer()
                 MDButtonText:
                     text: "Register Employer"
+
+
+
+<PunchScreen>:
+    name:"punch"
+
+    MDBoxLayout:
+        orientation:"vertical"
+        padding: 15
+        md_bg_color: 1,1,1,1
+
+        # Spacer to push buttons to the bottom
+        Widget:
+
+        MDBoxLayout:
+            orientation: "horizontal"
+            adaptive_size: True
+            pos_hint: {"center_x": 0.5}
+            padding: 10
+            spacing: 10
+
+            MDButton:
+                style: "filled"
+                on_release: root.pressed_clock_in()
+                MDButtonText:
+                    text: "Clock In"
+
+            MDButton:
+                style: "filled"
+                on_release: root.pressed_clock_out()
+                MDButtonText:
+                    text: "Clock Out"
+
+        # Small spacer at the very bottom if needed
+        Widget:
+            size_hint_y: None
+            height: dp(10)
 
 
 
